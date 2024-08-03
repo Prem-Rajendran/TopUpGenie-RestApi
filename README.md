@@ -1,2 +1,2 @@
-# TopUpGenie-RestApi
-TopUpGenie-RestApi
+# TopUpGenie
+TopUpGenie
