@@ -11,7 +11,7 @@ using TopUpGenie.DataAccess.DataContext;
 namespace TopUpGenie_RestApi.Migrations
 {
     [DbContext(typeof(TopUpGenieDbContext))]
-    [Migration("20240804052131_InitialMigration-1")]
+    [Migration("20240804072918_InitialMigration-1")]
     partial class InitialMigration1
     {
         /// <inheritdoc />
@@ -185,6 +185,9 @@ namespace TopUpGenie_RestApi.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("Verified")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

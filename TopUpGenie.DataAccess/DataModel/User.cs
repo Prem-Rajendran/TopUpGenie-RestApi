@@ -10,4 +10,7 @@ public class User
 
     [Required]
     public string? Password { get; set; }
+
+    [Required]
+    public bool Verified { get; set; } = false;
 }

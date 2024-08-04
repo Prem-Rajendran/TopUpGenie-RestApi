@@ -1,4 +1,10 @@
-﻿namespace TopUpGenie.RestApi.Controllers;
+﻿using TopUpGenie.Common;
+using TopUpGenie.Common.Interface;
+using TopUpGenie.DataAccess.DataModel;
+using TopUpGenie.Services.Helper;
+using TopUpGenie.Services.Models.RequestModels;
+
+namespace TopUpGenie.RestApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -14,10 +20,20 @@ public class AdminController : ControllerBase
         _dbContext = dbContext;
     }
 
-    [HttpGet(Name = "AdminController")]
-    public string Get()
+
+    [HttpPost]
+    [Route("CreateUser")]
+    public IResponse<User> CreateUser([FromBody] CreateUserRequestModel model)
     {
-        return "AdminController";
+        GenericServiceResponse<User> response = new GenericServiceResponse<User>
+        {
+            Data = new User
+            {
+                Name = model.Name
+            },
+            Status = Common.Enums.Status.Success
+        };
+        return response;
     }
 }
 

@@ -9,10 +9,14 @@
   <ItemGroup>
     <None Remove="DataModel\" />
     <None Remove="DataContext\" />
+    <None Remove="Interface\" />
+    <None Remove="Repository\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataModel\" />
     <Folder Include="DataContext\" />
+    <Folder Include="Interface\" />
+    <Folder Include="Repository\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.20">

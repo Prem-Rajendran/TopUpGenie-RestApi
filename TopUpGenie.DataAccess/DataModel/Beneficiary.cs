@@ -12,6 +12,7 @@ public class Beneficiary
     [Required]
     public int AccountId { get; set; }
 
+    [Required]
     [ForeignKey("User")]
     public int CreatedBy { get; set; }
 

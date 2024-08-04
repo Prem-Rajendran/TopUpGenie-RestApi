@@ -97,6 +97,14 @@ bld/
 [Ll]og/
 bin
 obj
+TopUpGenie.Common/obj*
+TopUpGenie.Common/bin*
+TopUpGenie.DataAccess/bin*
+TopUpGenie.DataAccess/obj*
+TopUpGenie.Services/bin*
+TopUpGenie.Services/obj*
+TopUpGenie.RestApi/bin*
+TopUpGenie.RestApi/obj*
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

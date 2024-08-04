@@ -3,5 +3,5 @@
 public class Admin : User
 {
     [Required]
-    public bool IsAdmin { get; set; }
+    public bool IsAdmin { get; set; } = false;
 }

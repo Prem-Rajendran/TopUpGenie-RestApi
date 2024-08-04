@@ -8,5 +8,19 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TopUpGenie.DataAccess\TopUpGenie.DataAccess.csproj" />
+    <ProjectReference Include="..\TopUpGenie.Common\TopUpGenie.Common.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Helper\" />
+    <None Remove="Models\" />
+    <None Remove="Models\RequestModels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helper\" />
+    <Folder Include="Models\" />
+    <Folder Include="Models\RequestModels\" />
   </ItemGroup>
 </Project>

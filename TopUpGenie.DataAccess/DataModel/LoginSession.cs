@@ -14,6 +14,7 @@ public class LoginSession
     [Required]
     public string? RefreshToken { get; set; }
 
+    [Required]
     public DateTime ExpirationDateTime { get; set; }
 
     public DateTime CreatedAt { get; set; }

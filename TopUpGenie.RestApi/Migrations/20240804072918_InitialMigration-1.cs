@@ -36,8 +36,9 @@ namespace TopUpGenie_RestApi.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Password = table.Column<string>(type: "TEXT", nullable: false),
+                    Verified = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: 0),
                     Discriminator = table.Column<string>(type: "TEXT", nullable: false),
-                    IsAdmin = table.Column<bool>(type: "INTEGER", nullable: true)
+                    IsAdmin = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
                 {
