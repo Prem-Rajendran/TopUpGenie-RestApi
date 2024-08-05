@@ -63,6 +63,16 @@ public class ErrorCodes
     public static string AUTHENTICATION_FAILED = "AUTHENTICATION-002";
 
     /// <summary>
+    /// AUTHENTICATION_INVALIDATION_EXCEPTION
+    /// </summary>
+    public static string AUTHENTICATION_INVALIDATION_EXCEPTION = "AUTHENTICATION-003";
+
+    /// <summary>
+    /// AUTHENTICATION_INVALIDATION_FAILED
+    /// </summary>
+    public static string AUTHENTICATION_INVALIDATION_FAILED = "AUTHENTICATION-004";
+
+    /// <summary>
     /// TOKEN_SERVICE_FAILED
     /// </summary>
     public static string TOKEN_SERVICE_FAILED = "TOKEN-SERVICE-001";
@@ -76,5 +86,25 @@ public class ErrorCodes
     /// TOKEN_SERVICE_EXCEPTION
     /// </summary>
     public static string TOKEN_SERVICE_EXCEPTION = "TOKEN-SERVICE-003";
+
+    /// <summary>
+    /// TOKEN_SERVICE_FAILED
+    /// </summary>
+    public static string TOKEN_INVALIDATION_FAILED = "TOKEN-SERVICE-004";
+
+    /// <summary>
+    /// TOKEN_SERVICE_EXCEPTION
+    /// </summary>
+    public static string TOKEN_INVALIDATION_EXCEPTION = "TOKEN-SERVICE-005";
+
+    /// <summary>
+    /// TOKEN_SERVICE_FAILED
+    /// </summary>
+    public static string TOKEN_VALIDATION_FAILED = "TOKEN-SERVICE-006";
+
+    /// <summary>
+    /// TOKEN_SERVICE_EXCEPTION
+    /// </summary>
+    public static string TOKEN_VALIDATION_EXCEPTION = "TOKEN-SERVICE-007";
 }
 

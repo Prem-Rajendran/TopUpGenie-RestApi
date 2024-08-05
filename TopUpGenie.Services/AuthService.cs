@@ -1,8 +1,4 @@
-﻿using System.Security.Authentication;
-using TopUpGenie.Services.Constants;
-using TopUpGenie.Services.Extensions;
-
-namespace TopUpGenie.Services;
+﻿namespace TopUpGenie.Services;
 
 public class AuthService : IAuthService
 {
@@ -60,6 +56,39 @@ public class AuthService : IAuthService
             {
                 ErrorCode = ErrorCodes.AUTHENTICATION_EXCEPTION,
                 Description = string.Format(ErrorMessage.AUTHENTICATION_EXCEPTION, ex.Message),
+            });
+        }
+
+        return response;
+    }
+
+    public async Task<IResponse<bool>> InvalidateTokenAsync(RequestContext requestContext)
+    {
+        IResponse<bool> response = new GenericServiceResponse<bool> { Status = Common.Enums.Status.Unknown };
+
+        try
+        {
+            User? user = await _unitOfWork.Users.GetByIdAsync(requestContext.UserId);
+            if (user != null && await _tokenService.InvalidateToken(response, user))
+                return response;
+            else
+            {
+                response.Status = Common.Enums.Status.Failure;
+                response.Messages ??= new List<Message>();
+                response.Messages.Add(new Message
+                {
+                    ErrorCode = ErrorCodes.AUTHENTICATION_INVALIDATION_FAILED,
+                    Description = ErrorMessage.AUTHENTICATION_INVALIDATION_FAILED
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            response.Messages ??= new List<Message>();
+            response.Messages.Add(new Message
+            {
+                ErrorCode = ErrorCodes.AUTHENTICATION_INVALIDATION_EXCEPTION,
+                Description = string.Format(ErrorMessage.AUTHENTICATION_INVALIDATION_EXCEPTION, ex.Message)
             });
         }
 

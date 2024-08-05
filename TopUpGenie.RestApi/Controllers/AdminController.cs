@@ -1,4 +1,6 @@
-﻿using TopUpGenie.Services.Models.Dto;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using TopUpGenie.Services.Models.Dto;
 
 namespace TopUpGenie.RestApi.Controllers;
 
@@ -13,6 +15,7 @@ public class AdminController : ControllerBase
         _adminService = adminService;
     }
 
+    [Authorize(Roles = "admin")]
     [HttpGet]
     [Route("GetUserById")]
     public async Task<IResponse<UserDto>> GetUserById(int id)
@@ -21,6 +24,7 @@ public class AdminController : ControllerBase
         return await _adminService.GetUserByIdAsync(context, id);
     }
 
+    [Authorize(Roles = "admin")]
     [HttpGet]
     [Route("GetAllUsers")]
     public async Task<IResponse<IEnumerable<UserDto>>> GetAllUsers()
@@ -29,6 +33,7 @@ public class AdminController : ControllerBase
         return await _adminService.GetAllUsersAsync(context);
     }
 
+    [Authorize(Roles = "admin")]
     [HttpPost]
     [Route("CreateUser")]
     public async Task<IResponse<CreateUserResponseModel>> CreateUser([FromBody] CreateUserRequestModel model)
@@ -37,6 +42,7 @@ public class AdminController : ControllerBase
         return await _adminService.CreateUserAsync(context, model);
     }
 
+    [Authorize(Roles = "admin")]
     [HttpPut]
     [Route("UpdateUser")]
     public async Task<IResponse<bool>> UpdateUser([FromBody] UpdateUserRequestModel model)
@@ -45,6 +51,7 @@ public class AdminController : ControllerBase
         return await _adminService.UpdateUserAsync(context, model);
     }
 
+    [Authorize(Roles = "admin")]
     [HttpDelete]
     [Route("DeleteUser")]
     public async Task<IResponse<bool>> DeleteUser(int id)

@@ -1,12 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using TopUpGenie.Common;
-using TopUpGenie.DataAccess;
-using TopUpGenie.DataAccess.Interface;
-using TopUpGenie.DataAccess.Repository;
-using TopUpGenie.Services;
-using TopUpGenie.RestApi.Extensions;
-
-var builder = WebApplication.CreateBuilder(args);
+﻿var builder = WebApplication.CreateBuilder(args);
 
 builder.AddDependencies();
 builder.Logging.ClearProviders();
@@ -61,6 +53,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
+
+app.UseAuthenticationMiddleware();
 
 app.UseAuthentication();
 app.UseAuthorization();

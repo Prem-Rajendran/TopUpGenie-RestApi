@@ -18,5 +18,14 @@ public class AuthenticationController : ControllerBase
         var context = HttpContext.GetRequestContext();
         return await _authService.AuthenticateAsync(context, model);
     }
+
+    [Authorize(Roles = "admin, user")]
+    [HttpDelete]
+    [Route("Logout")]
+    public async Task<IResponse<bool>> Logout()
+    {
+        var context = HttpContext.GetRequestContext();
+        return await _authService.InvalidateTokenAsync(context);
+    }
 }
 

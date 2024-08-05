@@ -14,5 +14,8 @@ public class User
     [Required]
     public bool Verified { get; set; } = false;
 
+    [Required]
+    public bool IsAdmin { get; set; } = false;
+
     public ICollection<Account>? Accounts { get; set; }
 }

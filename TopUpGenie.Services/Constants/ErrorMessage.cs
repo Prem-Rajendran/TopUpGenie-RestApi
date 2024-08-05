@@ -62,10 +62,21 @@ public static class ErrorMessage
     /// </summary>
     public static string AUTHENTICATION_FAILED = "Authentication failed. UserId or Password is incorrect";
 
+
+    /// <summary>
+    /// AUTHENTICATION_INVALIDATION_EXCEPTION
+    /// </summary>
+    public static string AUTHENTICATION_INVALIDATION_EXCEPTION = "Exception occured when invalidating user session - {0}";
+
+    /// <summary>
+    /// AUTHENTICATION_INVALIDATION_FAILED
+    /// </summary>
+    public static string AUTHENTICATION_INVALIDATION_FAILED = "Failed to invalidate user";
+
     /// <summary>
     /// TOKEN_SERVICE_FAILED
     /// </summary>
-    public static string TOKEN_SERVICE_FAILED = "Failed to add session";
+    public static string TOKEN_SERVICE_FAILED = "Failed to invalidate user session or user session does not exist";
 
     /// <summary>
     /// TOKEN_SERVICE_EXISTING_SESSION
@@ -76,5 +87,25 @@ public static class ErrorMessage
     /// TOKEN_SERVICE_EXCEPTION
     /// </summary>
     public static string TOKEN_SERVICE_EXCEPTION = "Exception occured when creating user session - {0}";
+
+    /// <summary>
+    /// TOKEN_SERVICE_FAILED
+    /// </summary>
+    public static string TOKEN_INVALIDATION_FAILED = "Failed to delete user session";
+
+    /// <summary>
+    /// TOKEN_SERVICE_EXCEPTION
+    /// </summary>
+    public static string TOKEN_INVALIDATION_EXCEPTION = "Exception occured when deleteing user session - {0}";
+
+    /// <summary>
+    /// TOKEN_VALIDATION_FAILED
+    /// </summary>
+    public static string TOKEN_VALIDATION_FAILED = "Invalid Token";
+
+    /// <summary>
+    /// TOKEN_VALIDATION_EXCEPTION
+    /// </summary>
+    public static string TOKEN_VALIDATION_EXCEPTION = "Token validation failed with exception - {0}";
 
 }
