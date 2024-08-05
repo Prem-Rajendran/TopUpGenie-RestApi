@@ -15,7 +15,7 @@ public class DbInitializer
             new Admin
             {
                 Name = "Admin",
-                Password = "AQAAAAIAAYagAAAAEJlUmFFlySnamcy/Hlvwnl4OAItFswCOjs0nZupeE5fBwfLHinLz5JcKDVB8u3K+qA==",  //"admin123"
+                Password = "AQAAAAIAAYagAAAAEN5sdVVIuZFjqtIAwcFiFa7DnlYgn89rujvz+KJE1sE097EJqlgpT5YiSHiR2hnGzw==",  //"admin123"
                 IsAdmin = true
             }
         );

@@ -1,8 +1,4 @@
-﻿using TopUpGenie.Common;
-using TopUpGenie.Common.Interface;
-using TopUpGenie.DataAccess.DataModel;
-using TopUpGenie.Services.Helper;
-using TopUpGenie.Services.Models.RequestModels;
+﻿using TopUpGenie.Services.Models.Dto;
 
 namespace TopUpGenie.RestApi.Controllers;
 
@@ -10,30 +6,50 @@ namespace TopUpGenie.RestApi.Controllers;
 [Route("[controller]")]
 public class AdminController : ControllerBase
 {
-    private TopUpGenieDbContext _dbContext;
+    private readonly IAdminService _adminService;
 
-    private readonly ILogger<AdminController> _logger;
-
-    public AdminController(ILogger<AdminController> logger, TopUpGenieDbContext dbContext)
+    public AdminController(IAdminService adminService)
     {
-        _logger = logger;
-        _dbContext = dbContext;
+        _adminService = adminService;
     }
 
+    [HttpGet]
+    [Route("GetUserById")]
+    public async Task<IResponse<UserDto>> GetUserById(int id)
+    {
+        var context = HttpContext.GetRequestContext();
+        return await _adminService.GetUserByIdAsync(context, id);
+    }
+
+    [HttpGet]
+    [Route("GetAllUsers")]
+    public async Task<IResponse<IEnumerable<UserDto>>> GetAllUsers()
+    {
+        var context = HttpContext.GetRequestContext();
+        return await _adminService.GetAllUsersAsync(context);
+    }
 
     [HttpPost]
     [Route("CreateUser")]
-    public IResponse<User> CreateUser([FromBody] CreateUserRequestModel model)
+    public async Task<IResponse<CreateUserResponseModel>> CreateUser([FromBody] CreateUserRequestModel model)
     {
-        GenericServiceResponse<User> response = new GenericServiceResponse<User>
-        {
-            Data = new User
-            {
-                Name = model.Name
-            },
-            Status = Common.Enums.Status.Success
-        };
-        return response;
+        var context = HttpContext.GetRequestContext();
+        return await _adminService.CreateUserAsync(context, model);
+    }
+
+    [HttpPut]
+    [Route("UpdateUser")]
+    public async Task<IResponse<bool>> UpdateUser([FromBody] UpdateUserRequestModel model)
+    {
+        var context = HttpContext.GetRequestContext();
+        return await _adminService.UpdateUserAsync(context, model);
+    }
+
+    [HttpDelete]
+    [Route("DeleteUser")]
+    public async Task<IResponse<bool>> DeleteUser(int id)
+    {
+        var context = HttpContext.GetRequestContext();
+        return await _adminService.DeleteUser(context, id);
     }
 }
-

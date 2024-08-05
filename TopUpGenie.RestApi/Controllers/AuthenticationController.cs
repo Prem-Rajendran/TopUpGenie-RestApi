@@ -4,20 +4,19 @@
 [Route("[controller]")]
 public class AuthenticationController : ControllerBase
 {
-    private TopUpGenieDbContext _dbContext;
+    private IAuthService _authService;
 
-    private readonly ILogger<AuthenticationController> _logger;
-
-    public AuthenticationController(ILogger<AuthenticationController> logger, TopUpGenieDbContext dbContext)
+    public AuthenticationController(IAuthService authService)
     {
-        _logger = logger;
-        _dbContext = dbContext;
+        _authService = authService;
     }
 
-    [HttpGet(Name = "AuthenticationController")]
-    public string Get()
+    [HttpPost]
+    [Route("Login")]
+    public async Task<IResponse<TokenResponseModel>> Login([FromBody] UserAuthenticationRequestModel model)
     {
-        return "AuthenticationController";
+        var context = HttpContext.GetRequestContext();
+        return await _authService.AuthenticateAsync(context, model);
     }
 }
 

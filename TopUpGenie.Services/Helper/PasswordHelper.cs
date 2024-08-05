@@ -1,14 +1,19 @@
-﻿using Microsoft.AspNetCore.Identity;
-using TopUpGenie.DataAccess.DataModel;
+﻿namespace TopUpGenie.Services.Helper;
 
-namespace TopUpGenie.Services.Helper
+public static class PasswordHelper
 {
-	public static class PasswordHelper
+    private static readonly PasswordHasher<object> _passwordHasher = new PasswordHasher<object>();
+    private static readonly object _dummy = new object();
+
+    public static string GenerateHash(string password)
 	{
-		public static string GenerateHash(User user)
-		{
-            var hasher = new PasswordHasher<User>();
-			return hasher.HashPassword(user, user.Password);
-        }
-	}
+		return _passwordHasher.HashPassword(_dummy, password);
+    }
+
+    public static bool VerifyPassword(string? hashedPassword, string? providedPassword)
+    {
+        PasswordVerificationResult result = _passwordHasher.VerifyHashedPassword(_dummy, hashedPassword, providedPassword);
+
+        return result == PasswordVerificationResult.Success;
+    }
 }

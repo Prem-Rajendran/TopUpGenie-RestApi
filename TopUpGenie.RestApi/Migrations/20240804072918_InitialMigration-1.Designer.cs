@@ -8,7 +8,7 @@ using TopUpGenie.DataAccess.DataContext;
 
 #nullable disable
 
-namespace TopUpGenie_RestApi.Migrations
+namespace TopUpGenie.RestApi.Migrations
 {
     [DbContext(typeof(TopUpGenieDbContext))]
     [Migration("20240804072918_InitialMigration-1")]

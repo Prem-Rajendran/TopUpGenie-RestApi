@@ -7,7 +7,7 @@ using TopUpGenie.DataAccess.DataContext;
 
 #nullable disable
 
-namespace TopUpGenie_RestApi.Migrations
+namespace TopUpGenie.RestApi.Migrations
 {
     [DbContext(typeof(TopUpGenieDbContext))]
     partial class TopUpGenieDbContextModelSnapshot : ModelSnapshot

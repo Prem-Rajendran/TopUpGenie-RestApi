@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TopUpGenie_RestApi.Migrations
+namespace TopUpGenie.RestApi.Migrations
 {
     /// <inheritdoc />
     public partial class InitialMigration1 : Migration
