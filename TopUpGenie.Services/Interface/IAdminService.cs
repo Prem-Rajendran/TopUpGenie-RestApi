@@ -1,10 +1,8 @@
-﻿using TopUpGenie.Services.Models.Dto;
-
-namespace TopUpGenie.Services.Interface;
+﻿namespace TopUpGenie.Services.Interface;
 
 public interface IAdminService
 {
-	Task<IResponse<CreateUserResponseModel>> CreateUserAsync(RequestContext requestContext, CreateUserRequestModel requestModel);
+	Task<IResponse<UserDto>> CreateUserAsync(RequestContext requestContext, CreateUserRequestModel requestModel);
 
 	Task<IResponse<UserDto>> GetUserByIdAsync(RequestContext requestContext, int id);
 

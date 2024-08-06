@@ -6,26 +6,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TopUpGenie.RestApi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration1 : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Beneficiaries",
+                name: "TopUpOptions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    TopUpOptionId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Nickname = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
-                    AccountId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedBy = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Amount = table.Column<int>(type: "INTEGER", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Beneficiaries", x => x.Id);
+                    table.PrimaryKey("PK_TopUpOptions", x => x.TopUpOptionId);
                 });
 
             migrationBuilder.CreateTable(
@@ -34,11 +31,14 @@ namespace TopUpGenie.RestApi.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Password = table.Column<string>(type: "TEXT", nullable: false),
-                    Verified = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: 0),
-                    Discriminator = table.Column<string>(type: "TEXT", nullable: false),
-                    IsAdmin = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: 0)
+                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "TEXT", maxLength: 12, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false),
+                    Verified = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Balance = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,21 +46,28 @@ namespace TopUpGenie.RestApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Accounts",
+                name: "Beneficiaries",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    Nickname = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AccountNumber = table.Column<string>(type: "TEXT", nullable: false),
-                    Balance = table.Column<int>(type: "INTEGER", nullable: false),
-                    Currency = table.Column<string>(type: "TEXT", nullable: false, defaultValue: "AED")
+                    CreatedByUserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Accounts", x => x.Id);
+                    table.PrimaryKey("PK_Beneficiaries", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Accounts_Users_UserId",
+                        name: "FK_Beneficiaries_Users_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Beneficiaries_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -98,38 +105,27 @@ namespace TopUpGenie.RestApi.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    SourceAccountId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DestinationAccountId = table.Column<int>(type: "INTEGER", nullable: false),
                     BeneficiaryId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Amount = table.Column<int>(type: "INTEGER", nullable: false),
+                    TopUpOptionId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TransactionAmount = table.Column<int>(type: "INTEGER", nullable: false),
                     TransactionFee = table.Column<int>(type: "INTEGER", nullable: false),
-                    TotalAmount = table.Column<int>(type: "INTEGER", nullable: false),
-                    Currency = table.Column<string>(type: "TEXT", nullable: false, defaultValue: "AED"),
-                    BalanceBefore = table.Column<int>(type: "INTEGER", nullable: false),
-                    BalanceAfter = table.Column<int>(type: "INTEGER", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    TotalTransactionAmount = table.Column<int>(type: "INTEGER", nullable: false),
                     TransactionDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transactions_Accounts_DestinationAccountId",
-                        column: x => x.DestinationAccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Transactions_Accounts_SourceAccountId",
-                        column: x => x.SourceAccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Transactions_Beneficiaries_BeneficiaryId",
                         column: x => x.BeneficiaryId,
                         principalTable: "Beneficiaries",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Transactions_TopUpOptions_TopUpOptionId",
+                        column: x => x.TopUpOptionId,
+                        principalTable: "TopUpOptions",
+                        principalColumn: "TopUpOptionId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Transactions_Users_UserId",
@@ -140,14 +136,13 @@ namespace TopUpGenie.RestApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Accounts_AccountNumber",
-                table: "Accounts",
-                column: "AccountNumber",
-                unique: true);
+                name: "IX_Beneficiaries_CreatedByUserId",
+                table: "Beneficiaries",
+                column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Accounts_UserId",
-                table: "Accounts",
+                name: "IX_Beneficiaries_UserId",
+                table: "Beneficiaries",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -156,24 +151,31 @@ namespace TopUpGenie.RestApi.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TopUpOptions_Amount",
+                table: "TopUpOptions",
+                column: "Amount",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transactions_BeneficiaryId",
                 table: "Transactions",
                 column: "BeneficiaryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_DestinationAccountId",
+                name: "IX_Transactions_TopUpOptionId",
                 table: "Transactions",
-                column: "DestinationAccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transactions_SourceAccountId",
-                table: "Transactions",
-                column: "SourceAccountId");
+                column: "TopUpOptionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_UserId",
                 table: "Transactions",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_PhoneNumber",
+                table: "Users",
+                column: "PhoneNumber",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -186,10 +188,10 @@ namespace TopUpGenie.RestApi.Migrations
                 name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "Accounts");
+                name: "Beneficiaries");
 
             migrationBuilder.DropTable(
-                name: "Beneficiaries");
+                name: "TopUpOptions");
 
             migrationBuilder.DropTable(
                 name: "Users");

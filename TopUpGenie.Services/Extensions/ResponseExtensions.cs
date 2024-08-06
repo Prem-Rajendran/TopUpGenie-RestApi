@@ -9,16 +9,28 @@ namespace TopUpGenie.Services.Extensions
 
             if (responseModel != null && user != null)
             {
-                session = new LoginSession
+                session = user.LoginSessions?.FirstOrDefault();
+
+                if (session == null)
                 {
-                    AccessToken = responseModel.AccessToken,
-                    RefreshToken = responseModel.RefreshToken,
-                    ExpirationDateTime = responseModel.Expiration.AddHours(1),
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-                    UserId = user.Id,
-                    User = user
-                };
+                    return new LoginSession
+                    {
+                        AccessToken = responseModel.AccessToken,
+                        RefreshToken = responseModel.RefreshToken,
+                        ExpirationDateTime = responseModel.Expiration,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now,
+                        UserId = user.Id,
+                        User = user
+                    };
+                }
+                else
+                {
+                    session.AccessToken = responseModel.AccessToken;
+                    session.RefreshToken = responseModel.RefreshToken;
+                    session.ExpirationDateTime = responseModel.Expiration;
+                    session.UpdatedAt = DateTime.Now;
+                }
             }
 
             return session;

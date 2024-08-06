@@ -5,48 +5,30 @@ public class Transaction
     [Key]
     public int Id { get; set; }
 
+    [Required]
     [ForeignKey("User")]
     public int UserId { get; set; }
-
-    [ForeignKey("SourceAccount")]
-    public int SourceAccountId { get; set; }
-
-    [ForeignKey("DestinationAccount")]
-    public int DestinationAccountId { get; set; }
-
-    [ForeignKey("Beneficiary")]
-    public int BeneficiaryId { get; set; }
+    public User? User { get; set; }
 
     [Required]
-    public int Amount { get; set; }
+    [ForeignKey("Beneficiary")]
+    public int BeneficiaryId { get; set; }
+    public Beneficiary? Beneficiary { get; set; }
+
+    [Required]
+    [ForeignKey("TopUpOption")]
+    public int TopUpOptionId { get; set; }
+    public TopUpOption? TopUpOption { get; set; }
+
+    [Required]
+    public int TransactionAmount { get; set; }
 
     [Required]
     public int TransactionFee { get; set; }
 
     [Required]
-    public int TotalAmount { get; set; }
+    public int TotalTransactionAmount { get; set; }
 
-    [Required]
-    public string? Currency { get; set; } = "AED";
-
-    [Required]
-    public int BalanceBefore { get; set; }
-
-    [Required]
-    public int BalanceAfter { get; set; }
-
-    [Required]
-    public string? Description { get; set; }
-
-    [Required]
     public DateTime TransactionDate { get; set; }
-
-    public User? User { get; set; }
-
-    public Account? SourceAccount { get; set; }
-
-    public Account? DestinationAccount { get; set; }
-
-    public Beneficiary? Beneficiary { get; set; }
 }
 

@@ -6,6 +6,7 @@ public class LoginSession
     public int Id { get; set; }
 
     [ForeignKey("User")]
+    [Required]
     public int UserId { get; set; }
 
     [Required]

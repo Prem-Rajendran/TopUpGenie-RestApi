@@ -1,10 +1,4 @@
-﻿using TopUpGenie.Common;
-using TopUpGenie.Services.Constants;
-using TopUpGenie.Services.Extensions;
-using TopUpGenie.Services.Helper;
-using TopUpGenie.Services.Models.Dto;
-
-namespace TopUpGenie.Services;
+﻿namespace TopUpGenie.Services;
 
 public class AdminService : IAdminService
 {
@@ -21,23 +15,18 @@ public class AdminService : IAdminService
     /// <param name="requestContext"></param>
     /// <param name="requestModel"></param>
     /// <returns></returns>
-    public async Task<IResponse<CreateUserResponseModel>> CreateUserAsync(RequestContext requestContext, CreateUserRequestModel requestModel)
+    public async Task<IResponse<UserDto>> CreateUserAsync(RequestContext requestContext, CreateUserRequestModel requestModel)
     {
-        GenericServiceResponse<CreateUserResponseModel> response = new() { Status = Common.Enums.Status.Unknown };
+        GenericServiceResponse<UserDto> response = new() { Status = Common.Enums.Status.Unknown };
     
         try
         {
-            User user = requestModel.ToUser();
-            Account account = requestModel.ToAccount();
+            User? user = requestModel.ToNewUser();
 
-            if (await _unitOfWork.CreateUserWithAccountAsync(user, account))
+            if (user != null && await _unitOfWork.Users.AddAsync(user) && await _unitOfWork.CompleteAsync())
             {
                 response.Status = Common.Enums.Status.Success;
-                response.Data = new CreateUserResponseModel
-                {
-                    UserId = user.Id,
-                    AccountNumber = account.AccountNumber
-                };
+                response.Data = new UserDto(user);
             }
             else
             {
@@ -79,9 +68,8 @@ public class AdminService : IAdminService
         try
         {
             IEnumerable<User> users = await _unitOfWork.Users.GetAllAsync();
-            if (users != null && users.Count() > 0)
+            if (users != null && users.Any())
             {
-                await _unitOfWork.CompleteAsync();
                 response.Status = Common.Enums.Status.Success;
                 response.Data = users.Select(user => new UserDto(user));
             }
@@ -128,7 +116,6 @@ public class AdminService : IAdminService
             User? user = await _unitOfWork.Users.GetByIdAsync(id);
             if (user != null)
             {
-                await _unitOfWork.CompleteAsync();
                 response.Status = Common.Enums.Status.Success;
                 response.Data = new UserDto(user);
             }
@@ -174,11 +161,10 @@ public class AdminService : IAdminService
         try
         {
             User? user = await _unitOfWork.Users.GetByIdAsync(requestModel.UserId);
-            user?.UpdatePassword(requestModel, response);
+            user?.UpdateUser(requestModel, response);
 
-            if (user != null && _unitOfWork.Users.Update(user))
+            if (user != null && _unitOfWork.Users.Update(user) && await _unitOfWork.CompleteAsync())
             {
-                await _unitOfWork.CompleteAsync();
                 response.Data = true;
                 response.Status = Common.Enums.Status.Success;
             }
@@ -217,16 +203,10 @@ public class AdminService : IAdminService
 
         try
         {
-            var AdminTask = _unitOfWork.AdminUsers.GetByIdAsync(id);
-            var UserTask = _unitOfWork.Users.GetByIdAsync(id);
-            await Task.WhenAll(AdminTask, UserTask);
+            User? user = await _unitOfWork.Users.GetByIdAsync(id);
 
-            Admin? admin = AdminTask.Result;
-            User? user = UserTask.Result;
-
-            if (admin == null && user != null && _unitOfWork.Users.Delete(user))
+            if (user != null && !user.IsAdmin && _unitOfWork.Users.Delete(user) && await _unitOfWork.CompleteAsync())
             {
-                await _unitOfWork.CompleteAsync();
                 response.Status = Common.Enums.Status.Success;
                 response.Data = true;
             }
@@ -252,4 +232,3 @@ public class AdminService : IAdminService
         return response;
     }
 }
-

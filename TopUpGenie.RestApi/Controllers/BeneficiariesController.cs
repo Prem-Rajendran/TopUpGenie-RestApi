@@ -1,23 +1,79 @@
-﻿namespace TopUpGenie.RestApi.Controllers;
+﻿using TopUpGenie.Services.Models.Dto;
+
+namespace TopUpGenie.RestApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
 public class BeneficiariesController : ControllerBase
 {
-    private TopUpGenieDbContext _dbContext;
+    private readonly IBeneficiaryService _beneficiaryService;
 
-    private readonly ILogger<BeneficiariesController> _logger;
-
-    public BeneficiariesController(ILogger<BeneficiariesController> logger, TopUpGenieDbContext dbContext)
+    public BeneficiariesController(IBeneficiaryService beneficiaryService)
     {
-        _logger = logger;
-        _dbContext = dbContext;
+        _beneficiaryService = beneficiaryService;
     }
 
-    [HttpGet(Name = "BeneficiariesController")]
-    public string Get()
+    [Authorize(Roles = "admin, user")]
+    [HttpGet]
+    [Route("GetMyBeneficiaryById")]
+    public async Task<IResponse<BeneficiaryDto>> GetMyBeneficiaryById(int id)
     {
-        return "BeneficiariesController";
+        var context = HttpContext.GetRequestContext();
+        return await _beneficiaryService.GetMyBeneficiaryById(context, id);
+    }
+
+    [Authorize(Roles = "admin, user")]
+    [HttpGet]
+    [Route("GetMyBeneficiaries")]
+    public async Task<IResponse<IEnumerable<BeneficiaryDto>>> GetMyBeneficiaries()
+    {
+        var context = HttpContext.GetRequestContext();
+        return await _beneficiaryService.GetMyBeneficiaries(context);
+    }
+
+    [Authorize(Roles = "admin, user")]
+    [HttpPost]
+    [Route("CreateBeneficiaryAsync")]
+    public async Task<IResponse<BeneficiaryDto>> CreateBeneficiaryAsync([FromBody] CreateBeneficiaryRequestModel model)
+    {
+        var context = HttpContext.GetRequestContext();
+        return await _beneficiaryService.CreateBeneficiaryAsync(context, model);
+    }
+
+    [Authorize(Roles = "admin, user")]
+    [HttpPut]
+    [Route("ActivateMyBeneficiary")]
+    public async Task<IResponse<bool>> ActivateMyBeneficiary(int beneficiaryId)
+    {
+        var context = HttpContext.GetRequestContext();
+        return await _beneficiaryService.ActivateMyBeneficiary(context, beneficiaryId);
+    }
+
+    [Authorize(Roles = "admin, user")]
+    [HttpPut]
+    [Route("DeactivateMyBeneficiary")]
+    public async Task<IResponse<bool>> DeactivateMyBeneficiary(int beneficiaryId)
+    {
+        var context = HttpContext.GetRequestContext();
+        return await _beneficiaryService.DeactivateMyBeneficiary(context, beneficiaryId);
+    }
+
+    [Authorize(Roles = "admin, user")]
+    [HttpPut]
+    [Route("UpdateMyBeneficiary")]
+    public async Task<IResponse<bool>> UpdateMyBeneficiary([FromBody] UpdateBeneficiaryRequestModel model)
+    {
+        var context = HttpContext.GetRequestContext();
+        return await _beneficiaryService.UpdateMyBeneficiary(context, model);
+    }
+
+    [Authorize(Roles = "admin, user")]
+    [HttpPut]
+    [Route("DeleteMyBeneficiary")]
+    public async Task<IResponse<bool>> DeleteMyBeneficiary(int beneficiaryId)
+    {
+        var context = HttpContext.GetRequestContext();
+        return await _beneficiaryService.DeleteMyBeneficiary(context, beneficiaryId);
     }
 }
 

@@ -11,8 +11,8 @@ using TopUpGenie.DataAccess.DataContext;
 namespace TopUpGenie.RestApi.Migrations
 {
     [DbContext(typeof(TopUpGenieDbContext))]
-    [Migration("20240804072918_InitialMigration-1")]
-    partial class InitialMigration1
+    [Migration("20240806063458_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,49 +20,16 @@ namespace TopUpGenie.RestApi.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.20");
 
-            modelBuilder.Entity("TopUpGenie.DataAccess.DataModel.Account", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("AccountNumber")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Balance")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountNumber")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Accounts");
-                });
-
             modelBuilder.Entity("TopUpGenie.DataAccess.DataModel.Beneficiary", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("CreatedBy")
+                    b.Property<int>("CreatedByUserId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Nickname")
@@ -73,7 +40,14 @@ namespace TopUpGenie.RestApi.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Beneficiaries");
                 });
@@ -111,39 +85,43 @@ namespace TopUpGenie.RestApi.Migrations
                     b.ToTable("LoginSessions");
                 });
 
-            modelBuilder.Entity("TopUpGenie.DataAccess.DataModel.Transaction", b =>
+            modelBuilder.Entity("TopUpGenie.DataAccess.DataModel.TopUpOption", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("TopUpOptionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Amount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BalanceAfter")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("BalanceBefore")
+                    b.HasKey("TopUpOptionId");
+
+                    b.HasIndex("Amount")
+                        .IsUnique();
+
+                    b.ToTable("TopUpOptions");
+                });
+
+            modelBuilder.Entity("TopUpGenie.DataAccess.DataModel.Transaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("BeneficiaryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("DestinationAccountId")
+                    b.Property<int>("TopUpOptionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("SourceAccountId")
+                    b.Property<int>("TotalTransactionAmount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("TotalAmount")
+                    b.Property<int>("TransactionAmount")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("TransactionDate")
@@ -159,9 +137,7 @@ namespace TopUpGenie.RestApi.Migrations
 
                     b.HasIndex("BeneficiaryId");
 
-                    b.HasIndex("DestinationAccountId");
-
-                    b.HasIndex("SourceAccountId");
+                    b.HasIndex("TopUpOptionId");
 
                     b.HasIndex("UserId");
 
@@ -174,16 +150,31 @@ namespace TopUpGenie.RestApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
+                    b.Property<int>("Balance")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
                         .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Verified")
@@ -191,38 +182,35 @@ namespace TopUpGenie.RestApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
+
                     b.ToTable("Users");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
-
-                    b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("TopUpGenie.DataAccess.DataModel.Admin", b =>
+            modelBuilder.Entity("TopUpGenie.DataAccess.DataModel.Beneficiary", b =>
                 {
-                    b.HasBaseType("TopUpGenie.DataAccess.DataModel.User");
+                    b.HasOne("TopUpGenie.DataAccess.DataModel.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("INTEGER");
-
-                    b.HasDiscriminator().HasValue("Admin");
-                });
-
-            modelBuilder.Entity("TopUpGenie.DataAccess.DataModel.Account", b =>
-                {
-                    b.HasOne("TopUpGenie.DataAccess.DataModel.User", "User")
+                    b.HasOne("TopUpGenie.DataAccess.DataModel.User", "BeneficiaryUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("BeneficiaryUser");
+
+                    b.Navigation("CreatedByUser");
                 });
 
             modelBuilder.Entity("TopUpGenie.DataAccess.DataModel.LoginSession", b =>
                 {
                     b.HasOne("TopUpGenie.DataAccess.DataModel.User", "User")
-                        .WithMany()
+                        .WithMany("LoginSessions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -238,15 +226,9 @@ namespace TopUpGenie.RestApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TopUpGenie.DataAccess.DataModel.Account", "DestinationAccount")
+                    b.HasOne("TopUpGenie.DataAccess.DataModel.TopUpOption", "TopUpOption")
                         .WithMany()
-                        .HasForeignKey("DestinationAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TopUpGenie.DataAccess.DataModel.Account", "SourceAccount")
-                        .WithMany()
-                        .HasForeignKey("SourceAccountId")
+                        .HasForeignKey("TopUpOptionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -258,11 +240,14 @@ namespace TopUpGenie.RestApi.Migrations
 
                     b.Navigation("Beneficiary");
 
-                    b.Navigation("DestinationAccount");
-
-                    b.Navigation("SourceAccount");
+                    b.Navigation("TopUpOption");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TopUpGenie.DataAccess.DataModel.User", b =>
+                {
+                    b.Navigation("LoginSessions");
                 });
 #pragma warning restore 612, 618
         }

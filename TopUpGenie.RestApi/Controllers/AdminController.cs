@@ -36,7 +36,7 @@ public class AdminController : ControllerBase
     [Authorize(Roles = "admin")]
     [HttpPost]
     [Route("CreateUser")]
-    public async Task<IResponse<CreateUserResponseModel>> CreateUser([FromBody] CreateUserRequestModel model)
+    public async Task<IResponse<UserDto>> CreateUser([FromBody] CreateUserRequestModel model)
     {
         var context = HttpContext.GetRequestContext();
         return await _adminService.CreateUserAsync(context, model);

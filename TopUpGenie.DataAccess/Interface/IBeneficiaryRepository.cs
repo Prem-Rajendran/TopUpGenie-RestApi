@@ -1,7 +1,6 @@
-﻿using System;
-namespace TopUpGenie.DataAccess.Interface
+﻿namespace TopUpGenie.DataAccess.Interface;
+
+public interface IBeneficiaryRepository : IRepository<Beneficiary>
 {
-	public interface IBeneficiaryRepository : IRepository<Beneficiary>
-	{
-	}
+    Task<int> GetCountOfMyActiveBeneficiary(int userId);
 }

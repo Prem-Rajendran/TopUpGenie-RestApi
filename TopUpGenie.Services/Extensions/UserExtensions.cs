@@ -5,11 +5,43 @@ namespace TopUpGenie.Services.Extensions
 {
 	public static class UserExtensions
 	{
-		public static void UpdatePassword(this User user, UpdateUserRequestModel requestModel, IResponse<bool> response)
-		{
-			if (user == null)
-				return;
+        public static User? ToNewUser(this CreateUserRequestModel requestModel)
+        {
+            User? user = null;
 
+            if (requestModel != null)
+            {
+                user = new User
+                {
+                    Name = requestModel.Name,
+                    Password = PasswordHelper.GenerateHash(requestModel.Password ?? ""),
+                    Verified = requestModel.IsVerified,
+                    Balance = requestModel.InitialBalance,
+                    PhoneNumber = requestModel.PhoneNumber,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+            }
+
+            return user;
+        }
+
+        public static void UpdateUser(this User user, UpdateUserRequestModel requestModel, IResponse<bool> response)
+        {
+            if (requestModel != null && user != null)
+            {
+                user.Name = !string.IsNullOrWhiteSpace(requestModel.Name) ? requestModel.Name : user.Name;
+                user.PhoneNumber = !string.IsNullOrWhiteSpace(requestModel.PhoneNumber) ? requestModel.PhoneNumber : user.PhoneNumber;
+                user.Verified = requestModel.IsVerified != null ? requestModel.IsVerified.Value : user.Verified;
+                user.Balance += requestModel.Money;
+                user.UpdatePassword(requestModel, response);
+            }
+            else
+                response.Messages.Add(new Message { Description = "Password change not initiated. User not found" });
+        }
+
+        private static void UpdatePassword(this User user, UpdateUserRequestModel requestModel, IResponse<bool> response)
+		{
 			if (string.IsNullOrWhiteSpace(requestModel.OldPassword))
 			{
                 response.Messages.Add(new Message { Description = "Password change not initiated" });
@@ -17,9 +49,9 @@ namespace TopUpGenie.Services.Extensions
             }
 				
 
-			if (string.IsNullOrWhiteSpace(requestModel.Password)
+			if (string.IsNullOrWhiteSpace(requestModel.NewPassword)
 				|| string.IsNullOrWhiteSpace(requestModel.ConfirmPassword)
-				|| requestModel.Password != requestModel.ConfirmPassword)
+				|| requestModel.NewPassword != requestModel.ConfirmPassword)
 			{
                 response.Messages.Add(new Message { Description = "Password change not initiated. Password mismatch" });
                 return;
@@ -32,7 +64,7 @@ namespace TopUpGenie.Services.Extensions
                 return;
             }
 
-			user.Password = PasswordHelper.GenerateHash(requestModel.Password);
+			user.Password = PasswordHelper.GenerateHash(requestModel.NewPassword);
 		}
 	}
 }

@@ -3,7 +3,7 @@ namespace TopUpGenie.Services.Interface
 {
 	public interface ITokenService
 	{
-        Task<TokenResponseModel?> GenerateToken(IResponse<TokenResponseModel> response, User user, bool isAdmin);
+        Task<TokenResponseModel?> GenerateToken(IResponse<TokenResponseModel> response, User user);
 
         Task<bool> InvalidateToken(IResponse<bool> response, User user);
 

@@ -11,4 +11,17 @@ public class BenificiaryRepository : Repository<Beneficiary>, IBeneficiaryReposi
         _context = context;
         _logger = logger;
     }
+
+    public async Task<int> GetCountOfMyActiveBeneficiary(int userId)
+    {
+        try
+        {
+            IEnumerable<Beneficiary> beneficiaries = await _context.Beneficiaries.ToListAsync();
+            return beneficiaries.Select(b => b.CreatedByUserId == userId).Count();
+        }
+        catch
+        {
+            return 0;
+        }
+    }
 }

@@ -11,22 +11,23 @@ public class AuthService : IAuthService
         _tokenService = tokenService;
     }
 
+    /// <summary>
+    /// AuthenticateAsync
+    /// </summary>
+    /// <param name="requestContext"></param>
+    /// <param name="requestModel"></param>
+    /// <returns></returns>
     public async Task<IResponse<TokenResponseModel>> AuthenticateAsync(RequestContext requestContext, UserAuthenticationRequestModel requestModel)
     {
         GenericServiceResponse<TokenResponseModel> response = new GenericServiceResponse<TokenResponseModel> { Status = Common.Enums.Status.Unknown };
 
         try
         {
-            var AdminTask = _unitOfWork.AdminUsers.GetByIdAsync(requestModel.UserId);
-            var UserTask = _unitOfWork.Users.GetByIdAsync(requestModel.UserId);
-            await Task.WhenAll(AdminTask, UserTask);
-
-            Admin? admin = AdminTask.Result;
-            User? user = UserTask.Result;
+            User? user = await _unitOfWork.Users.GetByIdAsync(requestModel.UserId);
 
             if (user != null && PasswordHelper.VerifyPassword(user.Password, requestModel.Password))
             {
-                TokenResponseModel? tokenResponse = await _tokenService.GenerateToken(response, user, admin != null);
+                TokenResponseModel? tokenResponse = await _tokenService.GenerateToken(response, user);
 
                 if (tokenResponse != null)
                 {
@@ -62,6 +63,12 @@ public class AuthService : IAuthService
         return response;
     }
 
+
+    /// <summary>
+    /// InvalidateTokenAsync
+    /// </summary>
+    /// <param name="requestContext"></param>
+    /// <returns></returns>
     public async Task<IResponse<bool>> InvalidateTokenAsync(RequestContext requestContext)
     {
         IResponse<bool> response = new GenericServiceResponse<bool> { Status = Common.Enums.Status.Unknown };

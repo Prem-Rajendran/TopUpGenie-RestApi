@@ -8,4 +8,3 @@ namespace TopUpGenie.Services.Models.ResponseModels
 		public ClaimsPrincipal? claimsPrincipal;
 	}
 }
-

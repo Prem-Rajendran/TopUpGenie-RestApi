@@ -11,4 +11,12 @@ public class UserRepository : Repository<User>, IUserRepository
         _context = context;
         _logger = logger;
 	}
+
+    public async Task<User?> GetUserByPhoneNumber(string phoneNumber)
+    {
+        if (string.IsNullOrWhiteSpace(phoneNumber))
+            return null;
+
+        return await _context.Users.FirstOrDefaultAsync(user => user.PhoneNumber == phoneNumber);
+    }
 }

@@ -18,14 +18,14 @@ public class TokenService : ITokenService
     /// <param name="user"></param>
     /// <param name="isAdmin"></param>
     /// <returns></returns>
-    public async Task<TokenResponseModel?> GenerateToken(IResponse<TokenResponseModel> response, User user, bool isAdmin)
+    public async Task<TokenResponseModel?> GenerateToken(IResponse<TokenResponseModel> response, User user)
 	{
         TokenResponseModel? tokenResponse = null;
 
         try
         {
-            var sessions = await _unitOfWork.Sessions.GetAllAsync();
-            var existingSession = sessions.FirstOrDefault(s => s.UserId == user.Id);
+            var existingSession = user?.LoginSessions?.FirstOrDefault();
+            existingSession  ??= (await _unitOfWork.Sessions.GetAllAsync())?.FirstOrDefault(e => e.UserId == user?.Id);
 
             if (existingSession != null)
             {
@@ -36,14 +36,24 @@ public class TokenService : ITokenService
                     Description = ErrorMessage.TOKEN_SERVICE_EXISTING_SESSION,
                 });
 
-                _unitOfWork.Sessions.Delete(existingSession);
+                if (existingSession.ExpirationDateTime < DateTime.Now)
+                {
+                    _unitOfWork.Sessions.Delete(existingSession);
+                    await _unitOfWork.CompleteAsync();
+                    existingSession = null;
+                }
             }
 
-            tokenResponse = GetTokenResponse(user, isAdmin);
+            tokenResponse = GetTokenResponse(user);
 
             LoginSession? session =  tokenResponse.ToLoginSession(user);
             if (session != null)
-                await _unitOfWork.Sessions.AddAsync(session);
+            {
+                if (existingSession == null)
+                    await _unitOfWork.Sessions.AddAsync(session);
+                else
+                    _unitOfWork.Sessions.Update(session);
+            }
             else
             {
                 tokenResponse = null;
@@ -125,7 +135,7 @@ public class TokenService : ITokenService
         {
             SecurityToken validatedToken = await ValidatedToken(response, accessToken);
 
-            if (response != null && response.Data != null && validatedToken is JwtSecurityToken jwtToken && jwtToken.ValidTo < DateTime.UtcNow)
+            if (response != null && response.Status == Common.Enums.Status.Success && response.Data != null && validatedToken is JwtSecurityToken jwtToken && jwtToken.ValidTo < DateTime.UtcNow)
             {
                 var result = await RefreshToken(response);
                 if (result != null)
@@ -188,7 +198,7 @@ public class TokenService : ITokenService
             var sessions = await _unitOfWork.Sessions.GetAllAsync();
             var currentSession = sessions.FirstOrDefault(e => e.UserId == id);
 
-            if (currentSession != null)
+            if (currentSession != null && currentSession.AccessToken == accessToken)
             {
                 response.Status = Common.Enums.Status.Success;
                 response.Data.claimsPrincipal = principle;
@@ -217,28 +227,23 @@ public class TokenService : ITokenService
 
     private async Task<TokenResponseModel?> RefreshToken(IResponse<ValidateTokenRequestModel> response)
     {
-        var AdminTask = _unitOfWork.AdminUsers.GetByIdAsync(response.Data.UserId);
-        var UserTask = _unitOfWork.Users.GetByIdAsync(response.Data.UserId);
-        await Task.WhenAll(AdminTask, UserTask);
-
-        Admin? admin = AdminTask.Result;
-        User? user = UserTask.Result;
-
+        User? user = await _unitOfWork.Users.GetByIdAsync(response.Data.UserId);
+        
         if (user != null)
         {
             var tokenResponse = new GenericServiceResponse<TokenResponseModel>();
-            var res = await GenerateToken(tokenResponse, user, admin != null);
+            var res = await GenerateToken(tokenResponse, user);
             response.Messages ??= new List<Message>();
             tokenResponse.Messages?.ForEach(response.Messages.Add);
 
-            return tokenResponse.Data;
+            return res;
         }
 
         response.Status = Common.Enums.Status.Failure;
         return null;
     }
 
-    private TokenResponseModel GetTokenResponse(User user, bool isAdmin = false)
+    private TokenResponseModel GetTokenResponse(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_jwtSettings.Key ?? "");
@@ -249,7 +254,7 @@ public class TokenService : ITokenService
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Name ?? ""),
-                new Claim(ClaimTypes.Role, isAdmin ? "admin" : "user"),
+                new Claim(ClaimTypes.Role, user.IsAdmin ? "admin" : "user"),
             }),
             Issuer = _jwtSettings.Issuer,
             Audience = _jwtSettings.Audience,
@@ -264,7 +269,7 @@ public class TokenService : ITokenService
         {
             AccessToken = tokenHandler.WriteToken(token),
             RefreshToken = refreshToken,
-            Expiration = DateTime.Now.AddMinutes(5)
+            Expiration = DateTime.Now.AddHours(1)
         };
     }
 

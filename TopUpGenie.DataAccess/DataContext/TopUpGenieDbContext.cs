@@ -6,12 +6,11 @@ public class TopUpGenieDbContext : DbContext
     {
     }
 
-    public DbSet<Account> Accounts { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<Admin> Admins { get; set; }
     public DbSet<LoginSession> LoginSessions { get; set; }
     public DbSet<Beneficiary> Beneficiaries { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<TopUpOption> TopUpOptions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,13 +28,12 @@ public class TopUpGenieDbContext : DbContext
 
     private static void ConfigureAccountTable(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Account>()
-           .Property(a => a.Id)
-           .ValueGeneratedOnAdd(); // Auto-increment
+        modelBuilder.Entity<User>()
+            .HasIndex(a => a.PhoneNumber)
+            .IsUnique();
 
-        // Configure a unique constraint on the AccountNumber property
-        modelBuilder.Entity<Account>()
-            .HasIndex(a => a.AccountNumber)
-            .IsUnique(); // Ensure AccountNumber is unique
+        modelBuilder.Entity<TopUpOption>()
+            .HasIndex(a => a.Amount)
+            .IsUnique();
     }
 }
