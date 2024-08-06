@@ -10,11 +10,9 @@ public class Beneficiary
     public string? Nickname { get; set; }
 
     [Required]
-    [ForeignKey("BeneficiaryUser")]
     public int UserId { get; set; }
 
     [Required]
-    [ForeignKey("CreatedByUser")]
     public int CreatedByUserId { get; set; }
 
     [Required]
@@ -24,8 +22,10 @@ public class Beneficiary
 
     public DateTime UpdatedAt { get; set; }
 
+    [ForeignKey("UserId")]
     public User? BeneficiaryUser { get; set; }
 
+    [ForeignKey("CreatedByUserId")]
     public User? CreatedByUser { get; set; }
 }
 

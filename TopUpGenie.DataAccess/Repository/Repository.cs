@@ -1,4 +1,6 @@
-﻿namespace TopUpGenie.DataAccess.Repository;
+﻿using System.Linq.Expressions;
+
+namespace TopUpGenie.DataAccess.Repository;
 
 public class Repository<T> : IRepository<T> where T : class
 {

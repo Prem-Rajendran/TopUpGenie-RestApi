@@ -17,3 +17,4 @@ global using TopUpGenie.Services.Constants;
 global using TopUpGenie.Services.Extensions;
 global using TopUpGenie.Services.Settings;
 global using TopUpGenie.Services.Models.Dto;
+global using System.Net.Http.Json;

@@ -25,7 +25,7 @@ public class BeneficiaryService : IBeneficiaryService
         try
         {
             int count = await _unitOfWork.Beneficiaries.GetCountOfMyActiveBeneficiary(requestContext.UserId);
-            if (count <= 5)
+            if (count < 5)
             {
                 return await UpdateMyBeneficiary(requestContext, requestModel, true);
             }
@@ -71,14 +71,11 @@ public class BeneficiaryService : IBeneficiaryService
         {
             int count = await _unitOfWork.Beneficiaries.GetCountOfMyActiveBeneficiary(requestContext.UserId);
 
-            if (count <= 5)
+            if (count < 5)
             {
                 Beneficiary? beneficiary = await requestModel.CreateNewBeneficiary(_unitOfWork, requestContext.UserId);
-                if (beneficiary != null)
+                if (beneficiary != null && await _unitOfWork.Beneficiaries.AddAsync(beneficiary) && await _unitOfWork.CompleteAsync())
                 {
-                    if (await _unitOfWork.Beneficiaries.AddAsync(beneficiary))
-                        await _unitOfWork.CompleteAsync();
-
                     response.Status = Common.Enums.Status.Success;
                     response.Data = new BeneficiaryDto(beneficiary);
                 }
@@ -149,11 +146,11 @@ public class BeneficiaryService : IBeneficiaryService
         try
         {
             Beneficiary? beneficiary = await _unitOfWork.Beneficiaries.GetByIdAsync(id);
-            if (beneficiary != null && beneficiary.CreatedByUserId == requestContext.UserId)
+            if (beneficiary != null &&
+                beneficiary.CreatedByUserId == requestContext.UserId &&
+                _unitOfWork.Beneficiaries.Delete(beneficiary) &&
+                await _unitOfWork.CompleteAsync())
             {
-                if (_unitOfWork.Beneficiaries.Delete(beneficiary))
-                    await _unitOfWork.CompleteAsync();
-
                 response.Status = Common.Enums.Status.Success;
                 response.Data = true;
             }
@@ -296,11 +293,11 @@ public class BeneficiaryService : IBeneficiaryService
             if (beneficiary != null && beneficiary.CreatedByUserId == requestContext.UserId)
             {
                 await beneficiary.UpdateBeneficiary(requestModel, _unitOfWork, isActive);
-                if (_unitOfWork.Beneficiaries.Update(beneficiary))
-                    await _unitOfWork.CompleteAsync();
-
-                response.Status = Common.Enums.Status.Success;
-                response.Data = true;
+                if (_unitOfWork.Beneficiaries.Update(beneficiary) && await _unitOfWork.CompleteAsync())
+                {
+                    response.Status = Common.Enums.Status.Success;
+                    response.Data = true;
+                }
             }
             else
             {
@@ -330,4 +327,3 @@ public class BeneficiaryService : IBeneficiaryService
         return response;
     }
 }
-

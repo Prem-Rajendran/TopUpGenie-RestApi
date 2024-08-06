@@ -14,14 +14,24 @@ public class BenificiaryRepository : Repository<Beneficiary>, IBeneficiaryReposi
 
     public async Task<int> GetCountOfMyActiveBeneficiary(int userId)
     {
-        try
-        {
-            IEnumerable<Beneficiary> beneficiaries = await _context.Beneficiaries.ToListAsync();
-            return beneficiaries.Select(b => b.CreatedByUserId == userId).Count();
-        }
-        catch
-        {
-            return 0;
-        }
+        IEnumerable<Beneficiary> beneficiaries = await _context.Beneficiaries.ToListAsync();
+        return beneficiaries.Where(b => (b.CreatedByUserId == userId && b.IsActive == true)).Count();
+    }
+
+    public new async Task<IEnumerable<Beneficiary>> GetAllAsync()
+    {
+
+        return await _context.Beneficiaries
+            .Include(b => b.BeneficiaryUser)
+            .Include(b => b.CreatedByUser)
+            .ToListAsync();
+    }
+
+    public new async Task<Beneficiary?> GetByIdAsync(int id)
+    {
+        return await _context.Beneficiaries
+            .Include(b => b.BeneficiaryUser)
+            .Include(b => b.CreatedByUser)
+            .FirstOrDefaultAsync(e => e.Id == id);
     }
 }

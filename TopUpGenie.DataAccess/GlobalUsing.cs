@@ -6,3 +6,4 @@ global using TopUpGenie.DataAccess.Interface;
 global using Microsoft.Extensions.Logging;
 global using TopUpGenie.DataAccess.DataContext;
 global using TopUpGenie.DataAccess.Repository;
+global using Microsoft.EntityFrameworkCore.Storage;

@@ -13,6 +13,6 @@ global using TopUpGenie.DataAccess.Interface;
 global using TopUpGenie.DataAccess.Repository;
 global using TopUpGenie.Services;
 global using TopUpGenie.RestApi.Extensions;
-global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Authorization;
 global using TopUpGenie.RestApi.Middleware;
+global using TopUpGenie.Services.Models.Dto;

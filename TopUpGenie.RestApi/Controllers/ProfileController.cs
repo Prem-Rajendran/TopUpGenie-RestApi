@@ -4,20 +4,20 @@
 [Route("[controller]")]
 public class ProfileController : ControllerBase
 {
-    private TopUpGenieDbContext _dbContext;
+    private readonly IAdminService _adminService;
 
-    private readonly ILogger<ProfileController> _logger;
-
-    public ProfileController(ILogger<ProfileController> logger, TopUpGenieDbContext dbContext)
+    public ProfileController(IAdminService adminService)
     {
-        _logger = logger;
-        _dbContext = dbContext;
+        _adminService = adminService;
     }
 
-    [HttpGet(Name = "ProfileController")]
-    public string Get()
+    [Authorize(Roles = "admin, user")]
+    [HttpGet]
+    [Route("")]
+    public async Task<IResponse<UserDto>> Get()
     {
-        return "ProfileController";
+        var context = HttpContext.GetRequestContext();
+        return await _adminService.GetUserByIdAsync(context, context.UserId);
     }
 }
 

@@ -20,21 +20,14 @@ builder.Services.AddScoped(provider =>
     return new RequestContext(httpContextAccessor.HttpContext);
 });
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IBeneficiaryRepository, BenificiaryRepository>();
-builder.Services.AddScoped<ISessionRepository, SessionRepository>();
-builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IBeneficiaryService, BeneficiaryService>();
+builder.AddServices();
+builder.AddRepositories();
+builder.AddExternalDependency();
+builder.AddDbContext();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<TopUpGenieDbContext>();
 
 var app = builder.Build();
 

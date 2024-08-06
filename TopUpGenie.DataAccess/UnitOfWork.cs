@@ -1,82 +1,66 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿namespace TopUpGenie.DataAccess;
 
-namespace TopUpGenie.DataAccess
+public class UnitOfWork : IUnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    private readonly TopUpGenieDbContext _context;
+    private readonly ILogger<UnitOfWork> _logger;
+    private IDbContextTransaction? _transaction;
+
+    public IUserRepository Users { get; private set; }
+
+    public ISessionRepository Sessions { get; private set; }
+
+    public IBeneficiaryRepository Beneficiaries { get; private set; }
+
+    public ITopUpOptionsRepository TopUpOptions { get; private set; }
+
+    public UnitOfWork(TopUpGenieDbContext context, ILoggerFactory loggerFactory)
     {
-        private readonly TopUpGenieDbContext _context;
-        private readonly ILogger<UnitOfWork> _logger;
+        _context = context;
+        _logger = loggerFactory.CreateLogger<UnitOfWork>();
 
-        public IUserRepository Users { get; private set; }
+        Users = new UserRepository(_context, loggerFactory.CreateLogger<Repository<User>>());
+        Sessions = new SessionRepository(_context, loggerFactory.CreateLogger<Repository<LoginSession>>());
+        Beneficiaries = new BenificiaryRepository(_context, loggerFactory.CreateLogger<Repository<Beneficiary>>());
+        TopUpOptions = new TopUpOptionsRepository(_context, loggerFactory.CreateLogger<Repository<TopUpOption>>());
+    }
 
-        public ISessionRepository Sessions { get; private set; }
-
-        public ITransactionRepository Transactions { get; private set; }
-
-        public IBeneficiaryRepository Beneficiaries { get; private set; }
-
-        public UnitOfWork(TopUpGenieDbContext context, ILoggerFactory loggerFactory)
+    public async Task<bool> CompleteAsync()
+    {
+        try
         {
-            _context = context;
-            _logger = loggerFactory.CreateLogger<UnitOfWork>();
-            Users = new UserRepository(_context, loggerFactory.CreateLogger<Repository<User>>());
-            Sessions = new SessionRepository(_context, loggerFactory.CreateLogger<Repository<LoginSession>>());
-            Transactions = new TransactionRepository(_context, loggerFactory.CreateLogger<Repository<Transaction>>());
-            Beneficiaries = new BenificiaryRepository(_context, loggerFactory.CreateLogger<Repository<Beneficiary>>());
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError("Failed to save all changes - UnitOfWork", ex);
         }
 
-        //public async Task<bool> CreateUserWithAccountAsync(User user, Account account)
-        //{
-        //    bool status = false;
-        //    using (var transaction = await _context.Database.BeginTransactionAsync())
-        //    {
-        //        try
-        //        {
-        //            // Create User
-        //            await Users.AddAsync(user);
-        //            await _context.SaveChangesAsync();
+        return false;
+        
+    }
 
-        //            // Create Account
-        //            account.UserId = user.Id;
-        //            await _context.SaveChangesAsync();
+    public async Task BeginTransactionAsync()
+    {
+        _transaction = await _context.Database.BeginTransactionAsync();
+    }
 
-        //            // Commit the transaction
-        //            await transaction.CommitAsync();
-        //            status = true;
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            await transaction.RollbackAsync();
-        //            _logger.LogError(ex, "Error creating user and account.");
-        //        }
+    public async Task CommitAsync()
+    {
+        if (_transaction != null)
+            await _transaction.CommitAsync();
+    }
 
-        //    }
+    public async Task RollbackAsync()
+    {
+        if (_transaction != null)
+            await _transaction.RollbackAsync();
+    }
 
-        //    return status;
-        //}
-
-        public async Task<bool> CompleteAsync()
-        {
-            try
-            {
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError("Failed to save all changes - UnitOfWork", ex);
-            }
-
-            return false;
-            
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
-        }
+    public void Dispose()
+    {
+        _context.Dispose();
     }
 }
 

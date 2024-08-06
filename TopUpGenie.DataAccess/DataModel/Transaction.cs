@@ -27,6 +27,12 @@ public class Transaction
     public int TransactionFee { get; set; }
 
     [Required]
+    public string? TransactionStatus { get; set; }
+
+    [Required]
+    public string? Messages { get; set; }
+
+    [Required]
     public int TotalTransactionAmount { get; set; }
 
     public DateTime TransactionDate { get; set; }
