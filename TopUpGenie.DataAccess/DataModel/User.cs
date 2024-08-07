@@ -3,6 +3,7 @@
 /// <summary>
 /// User
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class User
 {
     [Key]

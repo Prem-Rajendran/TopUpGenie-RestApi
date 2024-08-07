@@ -3,6 +3,7 @@
 /// <summary>
 /// TopUpOption
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class TopUpOption
 {
     [Key]

@@ -3,6 +3,7 @@
 /// <summary>
 /// Transaction
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class Transaction
 {
     [Key]

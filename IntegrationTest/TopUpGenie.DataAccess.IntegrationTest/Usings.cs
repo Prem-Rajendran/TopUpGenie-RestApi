@@ -1,1 +1,10 @@
 ﻿global using Xunit;
+global using Microsoft.EntityFrameworkCore;
+global using TopUpGenie.DataAccess.DataContext;
+global using TopUpGenie.DataAccess.DataModel;
+global using Microsoft.Data.Sqlite;
+global using Microsoft.Extensions.Logging.Abstractions;
+global using TopUpGenie.DataAccess.IntegrationTest.Helper;
+global using TopUpGenie.DataAccess.Repository;
+global using Microsoft.Extensions.Logging;
+global using TopUpGenie.DataAccess.Interface;

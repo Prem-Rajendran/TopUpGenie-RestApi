@@ -3,6 +3,7 @@
 /// <summary>
 /// ErrorCodes
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class ErrorCodes
 {
     #region Admin Error Codes

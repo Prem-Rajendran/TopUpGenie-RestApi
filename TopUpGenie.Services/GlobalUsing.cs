@@ -19,3 +19,4 @@ global using TopUpGenie.Services.Settings;
 global using TopUpGenie.Services.Models.Dto;
 global using System.Net.Http.Json;
 global using TopUpGenie.DataAccess.Enums;
+global using System.Diagnostics.CodeAnalysis;

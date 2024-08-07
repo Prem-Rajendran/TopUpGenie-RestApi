@@ -3,6 +3,7 @@
 /// <summary>
 /// TopUpGenieDbContext
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class TopUpGenieDbContext : DbContext
 {
     public TopUpGenieDbContext(DbContextOptions<TopUpGenieDbContext> options) : base(options)

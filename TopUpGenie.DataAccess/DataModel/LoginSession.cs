@@ -3,6 +3,7 @@
 /// <summary>
 /// LoginSession
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class LoginSession
 {
     [Key]

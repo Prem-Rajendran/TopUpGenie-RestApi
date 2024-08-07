@@ -3,6 +3,7 @@
 /// <summary>
 /// TransactionDbContext
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class TransactionDbContext : DbContext
 {
     public TransactionDbContext(DbContextOptions<TransactionDbContext> options) : base(options)

@@ -134,9 +134,8 @@ namespace TopUpGenie.RestApi.Migrations
                     b.Property<int>("TransactionFee")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("TransactionStatus")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("TransactionStatus")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");

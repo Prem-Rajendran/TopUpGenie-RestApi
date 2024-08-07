@@ -3,6 +3,7 @@
 /// <summary>
 /// Beneficiary
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class Beneficiary
 {
     [Key]

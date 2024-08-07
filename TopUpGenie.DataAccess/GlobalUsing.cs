@@ -8,3 +8,4 @@ global using TopUpGenie.DataAccess.DataContext;
 global using TopUpGenie.DataAccess.Repository;
 global using Microsoft.EntityFrameworkCore.Storage;
 global using TopUpGenie.DataAccess.Enums;
+global using System.Diagnostics.CodeAnalysis;

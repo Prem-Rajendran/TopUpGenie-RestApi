@@ -3,6 +3,7 @@
 /// <summary>
 /// DbInitializer
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class DbInitializer
 {
     /// <summary>
