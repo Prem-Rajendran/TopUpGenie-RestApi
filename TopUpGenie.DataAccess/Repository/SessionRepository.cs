@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.DataAccess.Repository;
 
+/// <summary>
+/// SessionRepository
+/// </summary>
 public class SessionRepository : Repository<LoginSession>, ISessionRepository
 {
     private readonly TopUpGenieDbContext _context;

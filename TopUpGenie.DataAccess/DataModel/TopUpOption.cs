@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.DataAccess.DataModel;
 
+/// <summary>
+/// TopUpOption
+/// </summary>
 public class TopUpOption
 {
     [Key]

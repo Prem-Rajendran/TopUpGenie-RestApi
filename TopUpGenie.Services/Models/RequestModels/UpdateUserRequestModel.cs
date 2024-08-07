@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Services.Models.RequestModels;
 
+/// <summary>
+/// UpdateUserRequestModel
+/// </summary>
 public class UpdateUserRequestModel
 {
 	[Required]

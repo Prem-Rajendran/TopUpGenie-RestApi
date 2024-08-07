@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Services;
 
+/// <summary>
+/// TopUpService
+/// </summary>
 public class TopUpService : ITopUpService
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -11,6 +14,10 @@ public class TopUpService : ITopUpService
         _transactionService = transactionService;
     }
 
+    /// <summary>
+    /// ListTopUpOptions
+    /// </summary>
+    /// <returns></returns>
     public async Task<IResponse<IEnumerable<TopUpOption>>> ListTopUpOptions()
     {
         IResponse<IEnumerable<TopUpOption>> response = new GenericServiceResponse<IEnumerable<TopUpOption>> { Status = Common.Enums.Status.Unknown };
@@ -26,31 +33,23 @@ public class TopUpService : ITopUpService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = "",
-                        Description = ""
-                    }
-                };
+                response.AddMessage(ErrorCodes.TOPUP_LIST_OPTIONS_FAILED, ErrorMessage.TOPUP_LIST_OPTIONS_FAILED);
             }
         }
         catch (Exception ex)
         {
-            response.Messages = new List<Message>
-            {
-                new Message
-                {
-                    ErrorCode = "",
-                    Description = ""
-                }
-            };
+            response.AddMessage(ErrorCodes.TOPUP_LIST_OPTIONS_EXCEPTION, ErrorMessage.TOPUP_LIST_OPTIONS_EXCEPTION, ex);
         }
 
         return response;
     }
 
+    /// <summary>
+    /// TopUpTransaction
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="requestModel"></param>
+    /// <returns></returns>
     public async Task<IResponse<bool>> TopUpTransaction(RequestContext context, InitiateTransactionRequestModel requestModel)
     {
         IResponse<bool> response = new GenericServiceResponse<bool> { Status = Common.Enums.Status.Unknown };
@@ -70,7 +69,7 @@ public class TopUpService : ITopUpService
             if (user != null &&
                 beneficiary != null &&
                 topUpOption != null &&
-                await _transactionService.BeginTransact(user, beneficiary, topUpOption))
+                await _transactionService.BeginTransact(response, user, beneficiary, topUpOption))
             {
                 response.Status = Common.Enums.Status.Success;
                 response.Data = true;
@@ -78,29 +77,14 @@ public class TopUpService : ITopUpService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = "",
-                        Description = ""
-                    }
-                };
+                response.AddMessage(ErrorCodes.TOPUP_TRANSACTION_FAILED, ErrorMessage.TOPUP_TRANSACTION_FAILED);
             }
         }
         catch (Exception ex)
         {
-            response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = "",
-                        Description = ""
-                    }
-                };
+            response.AddMessage(ErrorCodes.TOPUP_TRANSACTION_EXCEPTION, ErrorMessage.TOPUP_TRANSACTION_EXCEPTION, ex);
         }
 
         return response;
     }
 }
-

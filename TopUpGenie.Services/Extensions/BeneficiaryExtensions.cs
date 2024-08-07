@@ -1,9 +1,19 @@
 ﻿
 namespace TopUpGenie.Services.Extensions;
 
+/// <summary>
+/// BeneficiaryExtensions
+/// </summary>
 public static class BeneficiaryExtensions
 {
-	public static async Task<Beneficiary?> CreateNewBeneficiary(this CreateBeneficiaryRequestModel requestModel, IUnitOfWork unitOfWork, int createdByUserId)
+    /// <summary>
+    /// CreateNewBeneficiary
+    /// </summary>
+    /// <param name="requestModel"></param>
+    /// <param name="unitOfWork"></param>
+    /// <param name="createdByUserId"></param>
+    /// <returns></returns>
+    public static async Task<Beneficiary?> CreateNewBeneficiary(this CreateBeneficiaryRequestModel requestModel, IUnitOfWork unitOfWork, int createdByUserId)
 	{
 		if (requestModel != null && unitOfWork != null)
 		{
@@ -26,7 +36,16 @@ public static class BeneficiaryExtensions
 		return null;
 	}
 
-	public static async Task UpdateBeneficiary(this Beneficiary beneficiary, UpdateBeneficiaryRequestModel requestModel, IUnitOfWork unitOfWork, bool? isActive)
+
+    /// <summary>
+    /// UpdateBeneficiary
+    /// </summary>
+    /// <param name="beneficiary"></param>
+    /// <param name="requestModel"></param>
+    /// <param name="unitOfWork"></param>
+    /// <param name="isActive"></param>
+    /// <returns></returns>
+    public static async Task UpdateBeneficiary(this Beneficiary beneficiary, UpdateBeneficiaryRequestModel requestModel, IUnitOfWork unitOfWork, bool? isActive)
 	{
 		beneficiary.Id = requestModel.BeneficiaryId;
 

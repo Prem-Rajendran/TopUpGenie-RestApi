@@ -1,9 +1,10 @@
-﻿using System;
-namespace TopUpGenie.Services.Models.RequestModels
+﻿namespace TopUpGenie.Services.Models.RequestModels;
+
+/// <summary>
+/// InitiateTransactionRequestModel
+/// </summary>
+public class InitiateTransactionRequestModel
 {
-	public class InitiateTransactionRequestModel
-	{
-		public int BeneficiaryId { get; set; }
-		public int TopUpOptionId { get; set; }
-    }
+	public int BeneficiaryId { get; set; }
+	public int TopUpOptionId { get; set; }
 }

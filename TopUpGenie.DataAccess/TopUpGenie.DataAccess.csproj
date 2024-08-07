@@ -11,12 +11,14 @@
     <None Remove="DataContext\" />
     <None Remove="Interface\" />
     <None Remove="Repository\" />
+    <None Remove="Enums\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataModel\" />
     <Folder Include="DataContext\" />
     <Folder Include="Interface\" />
     <Folder Include="Repository\" />
+    <Folder Include="Enums\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.20">

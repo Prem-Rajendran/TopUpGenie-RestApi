@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Services.Models.RequestModels;
 
+/// <summary>
+/// CreateUserRequestModel
+/// </summary>
 public class CreateUserRequestModel
 {
     [Required]

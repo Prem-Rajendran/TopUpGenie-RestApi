@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.DataAccess.Repository;
 
+/// <summary>
+/// UserRepository
+/// </summary>
 public class UserRepository : Repository<User>, IUserRepository
 {
     private readonly TopUpGenieDbContext _context;
@@ -12,6 +15,11 @@ public class UserRepository : Repository<User>, IUserRepository
         _logger = logger;
 	}
 
+    /// <summary>
+    /// GetUserByPhoneNumber
+    /// </summary>
+    /// <param name="phoneNumber"></param>
+    /// <returns></returns>
     public async Task<User?> GetUserByPhoneNumber(string phoneNumber)
     {
         if (string.IsNullOrWhiteSpace(phoneNumber))

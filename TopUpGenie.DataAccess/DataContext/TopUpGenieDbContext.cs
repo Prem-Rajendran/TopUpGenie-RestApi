@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace TopUpGenie.DataAccess.DataContext;
 
-namespace TopUpGenie.DataAccess.DataContext;
-
+/// <summary>
+/// TopUpGenieDbContext
+/// </summary>
 public class TopUpGenieDbContext : DbContext
 {
     public TopUpGenieDbContext(DbContextOptions<TopUpGenieDbContext> options) : base(options)

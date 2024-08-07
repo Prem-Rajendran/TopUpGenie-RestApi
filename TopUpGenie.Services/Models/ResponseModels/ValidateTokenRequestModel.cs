@@ -1,10 +1,11 @@
-﻿using System;
-namespace TopUpGenie.Services.Models.ResponseModels
+﻿namespace TopUpGenie.Services.Models.ResponseModels;
+
+/// <summary>
+/// ValidateTokenRequestModel
+/// </summary>
+public class ValidateTokenRequestModel
 {
-	public class ValidateTokenRequestModel
-	{
-		public int UserId;
-		public TokenResponseModel? TokenResponse;
-		public ClaimsPrincipal? claimsPrincipal;
-	}
+	public int UserId;
+	public TokenResponseModel? TokenResponse;
+	public ClaimsPrincipal? claimsPrincipal;
 }

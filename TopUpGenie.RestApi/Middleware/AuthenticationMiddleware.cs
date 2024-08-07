@@ -1,6 +1,8 @@
 ﻿namespace TopUpGenie.RestApi.Middleware;
 
-// You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
+/// <summary>
+/// AuthenticationMiddleware
+/// </summary>
 public class AuthenticationMiddleware
 {
     private readonly RequestDelegate _next;
@@ -10,6 +12,12 @@ public class AuthenticationMiddleware
         _next = next;
     }
 
+    /// <summary>
+    /// Invoke
+    /// </summary>
+    /// <param name="httpContext"></param>
+    /// <param name="tokenService"></param>
+    /// <returns></returns>
     public async Task Invoke(HttpContext httpContext, ITokenService tokenService)
     {
         var accessToken = httpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
@@ -36,7 +44,9 @@ public class AuthenticationMiddleware
     }
 }
 
-// Extension method used to add the middleware to the HTTP request pipeline.
+/// <summary>
+/// AuthenticationMiddlewareExtensions
+/// </summary>
 public static class AuthenticationMiddlewareExtensions
 {
     public static IApplicationBuilder UseAuthenticationMiddleware(this IApplicationBuilder builder)

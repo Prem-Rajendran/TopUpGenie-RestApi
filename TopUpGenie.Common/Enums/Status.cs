@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace TopUpGenie.Common.Enums;
+﻿namespace TopUpGenie.Common.Enums;
 
 public enum Status
 {

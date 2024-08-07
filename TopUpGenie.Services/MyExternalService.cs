@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Services;
 
+/// <summary>
+/// MyExternalService
+/// </summary>
 public class MyExternalService : IExternalService
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -9,6 +12,12 @@ public class MyExternalService : IExternalService
         _unitOfWork = unitOfWork;
 	}
 
+    /// <summary>
+    /// CreditUserAccountAsync
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="amount"></param>
+    /// <returns></returns>
     public async Task<bool> CreditUserAccountAsync(int userId, int amount)
     {
         User? user = await _unitOfWork.Users.GetByIdAsync(userId);
@@ -22,6 +31,12 @@ public class MyExternalService : IExternalService
         return false;
     }
 
+    /// <summary>
+    /// DebitUserAccountAsync
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="amount"></param>
+    /// <returns></returns>
     public async Task<bool> DebitUserAccountAsync(int userId, int amount)
     {
         User? user = await _unitOfWork.Users.GetByIdAsync(userId);
@@ -35,6 +50,11 @@ public class MyExternalService : IExternalService
         return false;
     }
 
+    /// <summary>
+    /// GetUserBalanceAsync
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     public async Task<int> GetUserBalanceAsync(int userId)
     {
         User? user = await _unitOfWork.Users.GetByIdAsync(userId);

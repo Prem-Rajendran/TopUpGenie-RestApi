@@ -1,7 +1,9 @@
-﻿using System.Linq.Expressions;
+﻿namespace TopUpGenie.DataAccess.Repository;
 
-namespace TopUpGenie.DataAccess.Repository;
-
+/// <summary>
+/// Repository
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class Repository<T> : IRepository<T> where T : class
 {
     private readonly TopUpGenieDbContext _context;
@@ -16,6 +18,11 @@ public class Repository<T> : IRepository<T> where T : class
         _logger = logger;
     }
 
+    /// <summary>
+    /// AddAsync
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
     public async Task<bool> AddAsync(T entity)
     {
         try
@@ -31,6 +38,11 @@ public class Repository<T> : IRepository<T> where T : class
         return false;
     }
 
+    /// <summary>
+    /// Delete
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
     public bool Delete(T entity)
     {
         try
@@ -46,6 +58,10 @@ public class Repository<T> : IRepository<T> where T : class
         return false;
     }
 
+    /// <summary>
+    /// GetAllAsync
+    /// </summary>
+    /// <returns></returns>
     public async Task<IEnumerable<T>> GetAllAsync()
     {
         try
@@ -60,6 +76,11 @@ public class Repository<T> : IRepository<T> where T : class
         return new List<T>();
     }
 
+    /// <summary>
+    /// GetByIdAsync
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public async Task<T?> GetByIdAsync(int id)
     {
         try
@@ -75,6 +96,11 @@ public class Repository<T> : IRepository<T> where T : class
         return null;
     }
 
+    /// <summary>
+    /// Update
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
     public bool Update(T entity)
     {
         try

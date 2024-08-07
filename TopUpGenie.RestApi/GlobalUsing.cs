@@ -17,3 +17,7 @@ global using Microsoft.AspNetCore.Authorization;
 global using TopUpGenie.RestApi.Middleware;
 global using TopUpGenie.Services.Models.Dto;
 global using TopUpGenie.DataAccess.DataModel;
+global using System.Text;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.IdentityModel.Tokens;
+global using TopUpGenie.Services.Settings;

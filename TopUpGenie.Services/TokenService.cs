@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Services;
 
+/// <summary>
+/// TokenService
+/// </summary>
 public class TokenService : ITokenService
 {
     private readonly JwtSettings _jwtSettings;
@@ -29,12 +32,7 @@ public class TokenService : ITokenService
 
             if (existingSession != null)
             {
-                response.Messages ??= new List<Message>();
-                response.Messages.Add(new Message()
-                {
-                    ErrorCode = ErrorCodes.TOKEN_SERVICE_EXISTING_SESSION,
-                    Description = ErrorMessage.TOKEN_SERVICE_EXISTING_SESSION,
-                });
+                response.AddMessage(ErrorCodes.TOKEN_SERVICE_EXISTING_SESSION, ErrorMessage.TOKEN_SERVICE_EXISTING_SESSION);
 
                 if (existingSession.ExpirationDateTime < DateTime.Now)
                 {
@@ -57,22 +55,14 @@ public class TokenService : ITokenService
             else
             {
                 tokenResponse = null;
-                response.Messages.Add(new Message()
-                {
-                    ErrorCode = ErrorCodes.TOKEN_SERVICE_FAILED,
-                    Description = ErrorMessage.TOKEN_SERVICE_FAILED,
-                });
+                response.AddMessage(ErrorCodes.TOKEN_SERVICE_FAILED, ErrorMessage.TOKEN_SERVICE_FAILED);
             }
 
             await _unitOfWork.CompleteAsync();
         }
         catch (Exception ex)
         {
-            response.Messages.Add(new Message()
-            {
-                ErrorCode = ErrorCodes.TOKEN_SERVICE_EXCEPTION,
-                Description = string.Format(ErrorMessage.TOKEN_SERVICE_EXCEPTION, ex.Message),
-            });
+            response.AddMessage(ErrorCodes.TOKEN_SERVICE_EXCEPTION, ErrorMessage.TOKEN_SERVICE_EXCEPTION, ex);
         }
 
         return tokenResponse;
@@ -102,22 +92,12 @@ public class TokenService : ITokenService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages ??= new List<Message>();
-                response.Messages.Add(new Message()
-                {
-                    ErrorCode = ErrorCodes.TOKEN_INVALIDATION_FAILED,
-                    Description = ErrorMessage.TOKEN_INVALIDATION_FAILED
-                });
+                response.AddMessage(ErrorCodes.TOKEN_INVALIDATION_FAILED, ErrorMessage.TOKEN_INVALIDATION_FAILED);
             }
         }
         catch (Exception ex)
         {
-            response.Messages ??= new List<Message>();
-            response.Messages.Add(new Message()
-            {
-                ErrorCode = ErrorCodes.TOKEN_INVALIDATION_EXCEPTION,
-                Description = string.Format(ErrorMessage.TOKEN_INVALIDATION_EXCEPTION, ex.Message)
-            });
+            response.AddMessage(ErrorCodes.TOKEN_INVALIDATION_EXCEPTION, ErrorMessage.TOKEN_INVALIDATION_EXCEPTION, ex);
         }
 
         return false;
@@ -140,18 +120,15 @@ public class TokenService : ITokenService
                 var result = await RefreshToken(response);
                 if (result != null)
                     response.Data.TokenResponse = result;
+                else
+                    response.AddMessage(ErrorCodes.TOKEN_REFRESH_FAILED, ErrorMessage.TOKEN_REFRESH_FAILED);
             }
 
             return response;
         }
         catch (Exception ex)
         {
-            response.Messages ??= new List<Message>();
-            response.Messages.Add(new Message
-            {
-                ErrorCode = ErrorCodes.TOKEN_VALIDATION_EXCEPTION,
-                Description = string.Format(ErrorMessage.TOKEN_VALIDATION_EXCEPTION, ex.Message)
-            });
+            response.AddMessage(ErrorCodes.TOKEN_VALIDATION_EXCEPTION, ErrorMessage.TOKEN_VALIDATION_EXCEPTION, ex);
         }
 
         return response;
@@ -185,12 +162,7 @@ public class TokenService : ITokenService
         if (!(validatedToken is JwtSecurityToken jwtSecurityToken) || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
         {
             response.Status = Common.Enums.Status.Failure;
-            response.Messages ??= new List<Message>();
-            response.Messages.Add(new Message
-            {
-                ErrorCode = ErrorCodes.TOKEN_VALIDATION_FAILED,
-                Description = ErrorMessage.TOKEN_VALIDATION_FAILED
-            });
+            response.AddMessage(ErrorCodes.TOKEN_VALIDATION_FAILED, ErrorMessage.TOKEN_VALIDATION_FAILED);
         }
         else
         {
@@ -213,12 +185,7 @@ public class TokenService : ITokenService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages ??= new List<Message>();
-                response.Messages.Add(new Message
-                {
-                    ErrorCode = ErrorCodes.TOKEN_VALIDATION_FAILED,
-                    Description = ErrorMessage.TOKEN_VALIDATION_FAILED
-                });
+                response.AddMessage(ErrorCodes.TOKEN_VALIDATION_FAILED, ErrorMessage.TOKEN_VALIDATION_FAILED);
             }
         }
 

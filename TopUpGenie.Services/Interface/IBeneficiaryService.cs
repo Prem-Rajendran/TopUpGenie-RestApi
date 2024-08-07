@@ -1,19 +1,63 @@
-﻿namespace TopUpGenie.Services.Interface
+﻿namespace TopUpGenie.Services.Interface;
+
+/// <summary>
+/// IBeneficiaryService
+/// </summary>
+public interface IBeneficiaryService
 {
-	public interface IBeneficiaryService
-	{
-        Task<IResponse<BeneficiaryDto>> CreateBeneficiaryAsync(RequestContext requestContext, CreateBeneficiaryRequestModel requestModel);
+    /// <summary>
+    /// CreateBeneficiaryAsync
+    /// </summary>
+    /// <param name="requestContext"></param>
+    /// <param name="requestModel"></param>
+    /// <returns></returns>
+    Task<IResponse<BeneficiaryDto>> CreateBeneficiaryAsync(RequestContext requestContext, CreateBeneficiaryRequestModel requestModel);
 
-        Task<IResponse<BeneficiaryDto>> GetMyBeneficiaryById(RequestContext requestContext, int id);
+    /// <summary>
+    /// GetMyBeneficiaryById
+    /// </summary>
+    /// <param name="requestContext"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<IResponse<BeneficiaryDto>> GetMyBeneficiaryById(RequestContext requestContext, int id);
 
-        Task<IResponse<bool>> ActivateMyBeneficiary(RequestContext requestContext, int id);
+    /// <summary>
+    /// ActivateMyBeneficiary
+    /// </summary>
+    /// <param name="requestContext"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<IResponse<bool>> ActivateMyBeneficiary(RequestContext requestContext, int id);
 
-        Task<IResponse<bool>> DeactivateMyBeneficiary(RequestContext requestContext, int id);
+    /// <summary>
+    /// DeactivateMyBeneficiary
+    /// </summary>
+    /// <param name="requestContext"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<IResponse<bool>> DeactivateMyBeneficiary(RequestContext requestContext, int id);
 
-        Task<IResponse<IEnumerable<BeneficiaryDto>>> GetMyBeneficiaries(RequestContext requestContext);
+    /// <summary>
+    /// GetMyBeneficiaries
+    /// </summary>
+    /// <param name="requestContext"></param>
+    /// <returns></returns>
+    Task<IResponse<IEnumerable<BeneficiaryDto>>> GetMyBeneficiaries(RequestContext requestContext);
 
-        Task<IResponse<bool>> UpdateMyBeneficiary(RequestContext requestContext, UpdateBeneficiaryRequestModel requestModel, bool? isActive = null);
+    /// <summary>
+    /// UpdateMyBeneficiary
+    /// </summary>
+    /// <param name="requestContext"></param>
+    /// <param name="requestModel"></param>
+    /// <param name="isActive"></param>
+    /// <returns></returns>
+    Task<IResponse<bool>> UpdateMyBeneficiary(RequestContext requestContext, UpdateBeneficiaryRequestModel requestModel, bool? isActive = null);
 
-        Task<IResponse<bool>> DeleteMyBeneficiary(RequestContext requestContext, int id);
-    }
+    /// <summary>
+    /// DeleteMyBeneficiary
+    /// </summary>
+    /// <param name="requestContext"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    Task<IResponse<bool>> DeleteMyBeneficiary(RequestContext requestContext, int id);
 }

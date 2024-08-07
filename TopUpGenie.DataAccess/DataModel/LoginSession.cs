@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.DataAccess.DataModel;
 
+/// <summary>
+/// LoginSession
+/// </summary>
 public class LoginSession
 {
     [Key]

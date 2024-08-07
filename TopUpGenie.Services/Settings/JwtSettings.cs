@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Services.Settings;
 
+/// <summary>
+/// JwtSettings
+/// </summary>
 public class JwtSettings
 {
     public string? Key { get; set; }

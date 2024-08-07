@@ -1,10 +1,11 @@
-﻿using System;
-namespace TopUpGenie.Services.Models.ResponseModels
+﻿namespace TopUpGenie.Services.Models.ResponseModels;
+
+/// <summary>
+/// TokenResponseModel
+/// </summary>
+public class TokenResponseModel
 {
-	public class TokenResponseModel
-	{
-		public string? AccessToken { get; set; }
-		public string? RefreshToken { get; set; }
-		public DateTime Expiration { get; set; }
-	}
+	public string? AccessToken { get; set; }
+	public string? RefreshToken { get; set; }
+	public DateTime Expiration { get; set; }
 }

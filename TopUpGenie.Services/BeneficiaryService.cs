@@ -1,8 +1,8 @@
-﻿using TopUpGenie.Common;
-using TopUpGenie.Common.Interface;
+﻿namespace TopUpGenie.Services;
 
-namespace TopUpGenie.Services;
-
+/// <summary>
+/// BeneficiaryService
+/// </summary>
 public class BeneficiaryService : IBeneficiaryService
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -32,26 +32,12 @@ public class BeneficiaryService : IBeneficiaryService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = "",
-                        Description = ""
-                    }
-                };
+                response.AddMessage(ErrorCodes.BENEFICIARY_ACTIVATE_FAILED, ErrorMessage.BENEFICIARY_ACTIVATE_FAILED);
             }
         }
         catch (Exception ex)
         {
-            response.Messages = new List<Message>
-            {
-                new Message
-                {
-                    ErrorCode = "",
-                    Description = ""
-                }
-            };
+            response.AddMessage(ErrorCodes.BENEFICIARY_ACTIVATE_EXCEPTION, ErrorMessage.BENEFICIARY_ACTIVATE_EXCEPTION, ex);
         }
 
         return response;
@@ -82,39 +68,18 @@ public class BeneficiaryService : IBeneficiaryService
                 else
                 {
                     response.Status = Common.Enums.Status.Failure;
-                    response.Messages = new List<Message>
-                    {
-                        new Message
-                        {
-                            ErrorCode = "",
-                            Description = ""
-                        }
-                    };
+                    response.AddMessage(ErrorCodes.BENEFICIARY_CREATE_ADD_FAILED, ErrorMessage.BENEFICIARY_CREATE_ADD_FAILED);
                 }
             }
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = "",
-                        Description = ""
-                    }
-                };
+                response.AddMessage(ErrorCodes.BENEFICIARY_CREATE_LIMIT_EXCEEDED_FAILED, ErrorMessage.BENEFICIARY_CREATE_LIMIT_EXCEEDED_FAILED);
             }
         }
         catch (Exception ex)
         {
-            response.Messages = new List<Message>
-            {
-                new Message
-                {
-                    ErrorCode = "",
-                    Description = ""
-                }
-            };
+            response.AddMessage(ErrorCodes.BENEFICIARY_CREATE_EXCEPTION, ErrorMessage.BENEFICIARY_CREATE_EXCEPTION, ex);
         }
 
         return response;
@@ -157,26 +122,12 @@ public class BeneficiaryService : IBeneficiaryService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = "",
-                        Description = ""
-                    }
-                };
+                response.AddMessage(ErrorCodes.BENEFICIARY_DELETE_FAILED, ErrorMessage.BENEFICIARY_DELETE_FAILED);
             }
         }
         catch (Exception ex)
         {
-            response.Messages = new List<Message>
-            {
-                new Message
-                {
-                    ErrorCode = "",
-                    Description = ""
-                }
-            };
+            response.AddMessage(ErrorCodes.BENEFICIARY_DELETE_EXCEPTION, ErrorMessage.BENEFICIARY_DELETE_EXCEPTION, ex);
         }
 
         return response;
@@ -203,27 +154,13 @@ public class BeneficiaryService : IBeneficiaryService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = "",
-                        Description = ""
-                    }
-                };
+                response.AddMessage(ErrorCodes.BENEFICIARY_GET_ALL_FAILED, ErrorMessage.BENEFICIARY_GET_ALL_FAILED);
             }
 
         }
         catch (Exception ex)
         {
-            response.Messages = new List<Message>
-            {
-                new Message
-                {
-                    ErrorCode = "",
-                    Description = ""
-                }
-            };
+            response.AddMessage(ErrorCodes.BENEFICIARY_GET_ALL_EXCEPTION, ErrorMessage.BENEFICIARY_GET_ALL_EXCEPTION, ex);
         }
 
         return response;
@@ -251,27 +188,13 @@ public class BeneficiaryService : IBeneficiaryService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = "",
-                        Description = ""
-                    }
-                };
+                response.AddMessage(ErrorCodes.BENEFICIARY_GET_BY_ID_FAILED, ErrorMessage.BENEFICIARY_GET_BY_ID_FAILED);
             }
 
         }
         catch (Exception ex)
         {
-            response.Messages = new List<Message>
-            {
-                new Message
-                {
-                    ErrorCode = "",
-                    Description = ""
-                }
-            };
+            response.AddMessage(ErrorCodes.BENEFICIARY_GET_BY_ID_EXCEPTION, ErrorMessage.BENEFICIARY_GET_BY_ID_EXCEPTION, ex);
         }
 
         return response;
@@ -298,30 +221,21 @@ public class BeneficiaryService : IBeneficiaryService
                     response.Status = Common.Enums.Status.Success;
                     response.Data = true;
                 }
+                else
+                {
+                    response.Status = Common.Enums.Status.Failure;
+                    response.AddMessage(ErrorCodes.BENEFICIARY_UPDATE_FAILED, ErrorMessage.BENEFICIARY_UPDATE_FAILED);
+                }
             }
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = "",
-                        Description = ""
-                    }
-                };
+                response.AddMessage(ErrorCodes.BENEFICIARY_UPDATE_FIND_FAILED, ErrorMessage.BENEFICIARY_UPDATE_FIND_FAILED);
             }
         }
         catch (Exception ex)
         {
-            response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = "",
-                        Description = ""
-                    }
-                };
+            response.AddMessage(ErrorCodes.BENEFICIARY_UPDATE_EXCEPTION, ErrorMessage.BENEFICIARY_UPDATE_EXCEPTION, ex);
         }
 
         return response;

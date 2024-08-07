@@ -1,7 +1,14 @@
 ﻿namespace TopUpGenie.DataAccess.DataContext;
 
+/// <summary>
+/// DbInitializer
+/// </summary>
 public class DbInitializer
 {
+    /// <summary>
+    /// Initialize
+    /// </summary>
+    /// <param name="context"></param>
     public static void Initialize(TopUpGenieDbContext context)
     {
         context.Database.EnsureCreated();

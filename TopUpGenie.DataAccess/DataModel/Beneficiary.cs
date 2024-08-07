@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.DataAccess.DataModel;
 
+/// <summary>
+/// Beneficiary
+/// </summary>
 public class Beneficiary
 {
     [Key]

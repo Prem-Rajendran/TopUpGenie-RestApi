@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Services;
 
+/// <summary>
+/// AdminService
+/// </summary>
 public class AdminService : IAdminService
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -33,26 +36,12 @@ public class AdminService : IAdminService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages = new List<Message>()
-                {
-                    new Message
-                    {
-                        ErrorCode = ErrorCodes.ADMIN_CREATE_USER_FAILED,
-                        Description = ErrorMessage.ADMIN_CREATE_USER_FAILED
-                    }
-                };
+                response.AddMessage(ErrorCodes.ADMIN_CREATE_USER_FAILED, ErrorMessage.ADMIN_CREATE_USER_FAILED);
             }
         }
         catch (Exception ex)
         {
-            response.Messages = new List<Message>()
-            {
-                new Message
-                {
-                    ErrorCode = ErrorCodes.ADMIN_CREATE_USER_EXCEPTION,
-                    Description = string.Format(ErrorMessage.ADMIN_CREATE_USER_EXCEPTION, ex.Message)
-                }
-            };
+            response.AddMessage(ErrorCodes.ADMIN_CREATE_USER_EXCEPTION, ErrorMessage.ADMIN_CREATE_USER_EXCEPTION, ex);
         }
 
         return response;
@@ -78,26 +67,12 @@ public class AdminService : IAdminService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = ErrorCodes.ADMIN_GET_ALL_USERS_FAILED,
-                        Description = ErrorMessage.ADMIN_GET_ALL_USERS_FAILED
-                    }
-                };
+                response.AddMessage(ErrorCodes.ADMIN_GET_ALL_USERS_FAILED, ErrorMessage.ADMIN_GET_ALL_USERS_FAILED);
             }
         }
         catch (Exception ex)
         {
-            response.Messages = new List<Message>
-            {
-                new Message
-                {
-                    ErrorCode = ErrorCodes.ADMIN_GET_USER_BY_ID_EXCEPTION,
-                    Description = string.Format(ErrorMessage.ADMIN_GET_USER_BY_ID_EXCEPTION, ex.Message)
-                }
-            };
+            response.AddMessage(ErrorCodes.ADMIN_GET_ALL_USERS_EXCEPTION, ErrorMessage.ADMIN_GET_ALL_USERS_EXCEPTION, ex);
         }
 
         return response;
@@ -124,26 +99,12 @@ public class AdminService : IAdminService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages = new List<Message>()
-                {
-                    new Message
-                    {
-                        ErrorCode = ErrorCodes.ADMIN_GET_USER_BY_ID_FAILED,
-                        Description = ErrorMessage.ADMIN_GET_USER_BY_ID_FAILED
-                    }
-                };
+                response.AddMessage(ErrorCodes.ADMIN_GET_USER_BY_ID_FAILED, ErrorMessage.ADMIN_GET_USER_BY_ID_FAILED);
             }
         }
         catch (Exception ex)
         {
-            response.Messages = new List<Message>()
-            {
-                new Message
-                {
-                    ErrorCode = ErrorCodes.ADMIN_GET_USER_BY_ID_EXCEPTION,
-                    Description = string.Format(ErrorMessage.ADMIN_GET_USER_BY_ID_EXCEPTION, ex.Message)
-                }
-            };
+            response.AddMessage(ErrorCodes.ADMIN_GET_USER_BY_ID_EXCEPTION, ErrorMessage.ADMIN_GET_USER_BY_ID_EXCEPTION, ex);
         }
 
         return response;
@@ -158,7 +119,7 @@ public class AdminService : IAdminService
     /// <exception cref="NotImplementedException"></exception>
     public async Task<IResponse<bool>> UpdateUserAsync(RequestContext requestContext, UpdateUserRequestModel requestModel)
     {
-        GenericServiceResponse<bool> response = new() { Status = Common.Enums.Status.Unknown, Messages = new List<Message>() };
+        GenericServiceResponse<bool> response = new() { Status = Common.Enums.Status.Unknown };
 
         try
         {
@@ -173,20 +134,12 @@ public class AdminService : IAdminService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages.Add(new Message
-                {
-                    ErrorCode = ErrorCodes.ADMIN_UPDATE_USER_FAILED,
-                    Description = ErrorMessage.ADMIN_UPDATE_USER_FAILED
-                });
+                response.AddMessage(ErrorCodes.ADMIN_UPDATE_USER_FAILED, ErrorMessage.ADMIN_UPDATE_USER_FAILED);
             }
         }
         catch(Exception ex)
         {
-            response.Messages.Add(new Message
-            {
-                ErrorCode = ErrorCodes.ADMIN_UPDATE_USER_EXCEPTION,
-                Description = string.Format(ErrorMessage.ADMIN_UPDATE_USER_EXCEPTION, ex.Message)
-            });
+            response.AddMessage(ErrorCodes.ADMIN_UPDATE_USER_EXCEPTION, ErrorMessage.ADMIN_UPDATE_USER_EXCEPTION, ex);
         }
 
         return response;
@@ -201,7 +154,7 @@ public class AdminService : IAdminService
     /// <exception cref="NotImplementedException"></exception>
     public async Task<IResponse<bool>> DeleteUser(RequestContext requestContext, int id)
     {
-        GenericServiceResponse<bool> response = new() { Status = Common.Enums.Status.Unknown, Messages = new List<Message>() };
+        GenericServiceResponse<bool> response = new() { Status = Common.Enums.Status.Unknown};
 
         try
         {
@@ -215,20 +168,12 @@ public class AdminService : IAdminService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages.Add(new Message
-                {
-                    ErrorCode = ErrorCodes.ADMIN_DELETE_USER_FAILED,
-                    Description = ErrorMessage.ADMIN_DELETE_USER_FAILED
-                });
+                response.AddMessage(ErrorCodes.ADMIN_DELETE_USER_FAILED, ErrorMessage.ADMIN_DELETE_USER_FAILED);
             }
         }
         catch (Exception ex)
         {
-            response.Messages.Add(new Message
-            {
-                ErrorCode = ErrorCodes.ADMIN_DELETE_USER_EXCEPTION,
-                Description = string.Format(ErrorMessage.ADMIN_DELETE_USER_EXCEPTION, ex.Message)
-            });
+            response.AddMessage(ErrorCodes.ADMIN_DELETE_USER_EXCEPTION, ErrorMessage.ADMIN_DELETE_USER_EXCEPTION, ex);
         }
 
         return response;
@@ -252,27 +197,12 @@ public class AdminService : IAdminService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = "",
-                        Description = ""
-                    }
-                };
+                response.AddMessage(ErrorCodes.ADMIN_GET_LAST_FIVE_TRANSACTION_FAILED, ErrorMessage.ADMIN_GET_LAST_FIVE_TRANSACTION_FAILED);
             }
-
         }
         catch (Exception ex)
         {
-            response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = "",
-                        Description = ""
-                    }
-                };
+            response.AddMessage(ErrorCodes.ADMIN_GET_LAST_FIVE_TRANSACTION_EXCEPTION, ErrorMessage.ADMIN_GET_LAST_FIVE_TRANSACTION_EXCEPTION, ex);
         }
 
         return response;

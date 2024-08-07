@@ -1,8 +1,9 @@
-﻿using System;
-namespace TopUpGenie.DataAccess.Interface
+﻿namespace TopUpGenie.DataAccess.Interface;
+
+/// <summary>
+/// ISessionRepository
+/// </summary>
+public interface ISessionRepository : IRepository<LoginSession>
 {
-	public interface ISessionRepository : IRepository<LoginSession>
-	{
-	}
 }
 

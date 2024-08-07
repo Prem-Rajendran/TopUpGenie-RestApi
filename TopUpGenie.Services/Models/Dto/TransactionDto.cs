@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Services.Models.Dto;
 
+/// <summary>
+/// TransactionDto
+/// </summary>
 public class TransactionDto
 {
     public int TransactionId { get; set; }
@@ -20,7 +23,7 @@ public class TransactionDto
 
     public int TotalTransactionAmount { get; set; }
 
-    public string? TransactionStatus { get; set; }
+    public TransactionStatus? TransactionStatus { get; set; }
 
     public string? Messages { get; set; }
 

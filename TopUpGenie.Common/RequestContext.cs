@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Common;
 
+/// <summary>
+/// RequestContext
+/// </summary>
 public class RequestContext
 {
     public string? TrackingId { get; set; }

@@ -1,36 +1,43 @@
-﻿using System;
-using TopUpGenie.DataAccess.DataModel;
+﻿namespace TopUpGenie.DataAccess;
 
-namespace TopUpGenie.DataAccess
+/// <summary>
+/// TransactionUnitOfWork
+/// </summary>
+public class TransactionUnitOfWork : ITransactionUnitOfWork
 {
-    public class TransactionUnitOfWork : ITransactionUnitOfWork
+    private readonly TransactionDbContext _context;
+    private readonly ILogger<TransactionUnitOfWork> _logger;
+
+    public ITransactionRepository Transactions { get; private set; }
+
+    /// <summary>
+    /// TransactionUnitOfWork
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="loggerFactory"></param>
+    public TransactionUnitOfWork(TransactionDbContext context, ILoggerFactory loggerFactory)
     {
-        private readonly TransactionDbContext _context;
-        private readonly ILogger<TransactionUnitOfWork> _logger;
+        _context = context;
+        _logger = loggerFactory.CreateLogger<TransactionUnitOfWork>();
+        Transactions = new TransactionRepository(_context, loggerFactory.CreateLogger<Repository<Transaction>>());
+    }
 
-        public ITransactionRepository Transactions { get; private set; }
-
-        public TransactionUnitOfWork(TransactionDbContext context, ILoggerFactory loggerFactory)
+    /// <summary>
+    /// CompleteAsync
+    /// </summary>
+    /// <returns></returns>
+    public async Task<bool> CompleteAsync()
+    {
+        try
         {
-            _context = context;
-            _logger = loggerFactory.CreateLogger<TransactionUnitOfWork>();
-            Transactions = new TransactionRepository(_context, loggerFactory.CreateLogger<Repository<Transaction>>());
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Failed to save all changes - UnitOfWork", ex);
         }
 
-        public async Task<bool> CompleteAsync()
-        {
-            try
-            {
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Failed to save all changes - UnitOfWork", ex);
-            }
-
-            return false;
-        }
+        return false;
     }
 }
-

@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Services;
 
+/// <summary>
+/// AuthService
+/// </summary>
 public class AuthService : IAuthService
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -37,27 +40,18 @@ public class AuthService : IAuthService
                 else
                 {
                     response.Status = Common.Enums.Status.Failure;
+                    response.AddMessage(ErrorCodes.AUTHENTICATION_TOKEN_GENERATION_FAILED, ErrorMessage.AUTHENTICATION_TOKEN_GENERATION_FAILED);
                 }
             }
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages ??= new List<Message>();
-                response.Messages.Add(new Message
-                {
-                    ErrorCode = ErrorCodes.AUTHENTICATION_FAILED,
-                    Description = ErrorMessage.AUTHENTICATION_FAILED,
-                });
+                response.AddMessage(ErrorCodes.AUTHENTICATION_FAILED, ErrorMessage.AUTHENTICATION_FAILED);
             }
         }
         catch (Exception ex)
         {
-            response.Messages ??= new List<Message>();
-            response.Messages.Add(new Message
-            {
-                ErrorCode = ErrorCodes.AUTHENTICATION_EXCEPTION,
-                Description = string.Format(ErrorMessage.AUTHENTICATION_EXCEPTION, ex.Message),
-            });
+            response.AddMessage(ErrorCodes.AUTHENTICATION_EXCEPTION, ErrorMessage.AUTHENTICATION_EXCEPTION, ex);
         }
 
         return response;
@@ -81,25 +75,14 @@ public class AuthService : IAuthService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages ??= new List<Message>();
-                response.Messages.Add(new Message
-                {
-                    ErrorCode = ErrorCodes.AUTHENTICATION_INVALIDATION_FAILED,
-                    Description = ErrorMessage.AUTHENTICATION_INVALIDATION_FAILED
-                });
+                response.AddMessage(ErrorCodes.AUTHENTICATION_INVALIDATION_FAILED, ErrorMessage.AUTHENTICATION_INVALIDATION_FAILED);
             }
         }
         catch (Exception ex)
         {
-            response.Messages ??= new List<Message>();
-            response.Messages.Add(new Message
-            {
-                ErrorCode = ErrorCodes.AUTHENTICATION_INVALIDATION_EXCEPTION,
-                Description = string.Format(ErrorMessage.AUTHENTICATION_INVALIDATION_EXCEPTION, ex.Message)
-            });
+            response.AddMessage(ErrorCodes.AUTHENTICATION_EXCEPTION, ErrorMessage.AUTHENTICATION_EXCEPTION, ex);
         }
 
         return response;
     }
 }
-

@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.DataAccess.DataModel;
 
+/// <summary>
+/// User
+/// </summary>
 public class User
 {
     [Key]

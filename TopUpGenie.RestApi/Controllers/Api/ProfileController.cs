@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.RestApi.Controllers.Api;
 
+/// <summary>
+/// ProfileController
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class ProfileController : ControllerBase
@@ -11,12 +14,17 @@ public class ProfileController : ControllerBase
         _profileService = profileService;
     }
 
+    /// <summary>
+    /// Get
+    /// </summary>
+    /// <returns></returns>
     [Authorize(Roles = "admin, user")]
     [HttpGet]
     [Route("")]
     public async Task<IResponse<ProfileResponseModel>> Get()
     {
         var context = HttpContext.GetRequestContext();
-        return await _profileService.GetMyProfile(context);
+        var response = await _profileService.GetMyProfile(context);
+        return response.ToApiResponse(HttpContext);
     }
 }

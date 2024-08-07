@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.DataAccess.DataModel;
 
+/// <summary>
+/// Transaction
+/// </summary>
 public class Transaction
 {
     [Key]
@@ -27,7 +30,7 @@ public class Transaction
     public int TransactionFee { get; set; }
 
     [Required]
-    public string? TransactionStatus { get; set; }
+    public TransactionStatus? TransactionStatus { get; set; }
 
     [Required]
     public string? Messages { get; set; }

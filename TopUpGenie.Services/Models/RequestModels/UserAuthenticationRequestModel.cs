@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Services.Models.RequestModels;
 
+/// <summary>
+/// UserAuthenticationRequestModel
+/// </summary>
 public class UserAuthenticationRequestModel
 {
 	public int UserId { get; set; }

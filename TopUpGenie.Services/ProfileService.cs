@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Services;
 
+/// <summary>
+/// ProfileService
+/// </summary>
 public class ProfileService : IProfileService
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -11,6 +14,11 @@ public class ProfileService : IProfileService
         _transactionUnitOfWork = transactionUnitOfWork;
     }
 
+    /// <summary>
+    /// GetMyProfile
+    /// </summary>
+    /// <param name="requestContext"></param>
+    /// <returns></returns>
     public async Task<IResponse<ProfileResponseModel>> GetMyProfile(RequestContext requestContext)
     {
         IResponse<ProfileResponseModel> response = new GenericServiceResponse<ProfileResponseModel> { Status = Common.Enums.Status.Unknown };
@@ -34,6 +42,8 @@ public class ProfileService : IProfileService
                     profile.LastFiveTransactions = transactions.TakeLast(5).Select(s => new TransactionDto(s));
                     profile.TotalMonthlyTransaction = transactions.Sum(t => t.TransactionAmount);
                 }
+                else
+                    response.AddMessage(ErrorCodes.PROFILE_NO_TRANSACTION_RECORDS, ErrorMessage.PROFILE_NO_TRANSACTION_RECORDS);
 
                 if (beneficiaries != null && beneficiaries.Any())
                 {
@@ -41,6 +51,8 @@ public class ProfileService : IProfileService
                         .Where(b => b.CreatedByUserId == requestContext.UserId)
                         .Select(b => new BeneficiaryTransactionDto(transactions, b));
                 }
+                else
+                    response.AddMessage(ErrorCodes.PROFILE_NO_BENEFICIARIES, ErrorMessage.PROFILE_NO_BENEFICIARIES);
 
                 response.Data = profile;
                 response.Status = Common.Enums.Status.Success;
@@ -48,26 +60,12 @@ public class ProfileService : IProfileService
             else
             {
                 response.Status = Common.Enums.Status.Failure;
-                response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = "",
-                        Description = ""
-                    }
-                };
+                response.AddMessage(ErrorCodes.PROFILE_GET_FAILED, ErrorMessage.PROFILE_GET_FAILED);
             }
         }
         catch (Exception ex)
         {
-            response.Messages = new List<Message>
-                {
-                    new Message
-                    {
-                        ErrorCode = "",
-                        Description = ""
-                    }
-                };
+            response.AddMessage(ErrorCodes.PROFILE_GET_EXCEPTION, ErrorMessage.PROFILE_GET_EXCEPTION, ex);
         }
 
         return response;

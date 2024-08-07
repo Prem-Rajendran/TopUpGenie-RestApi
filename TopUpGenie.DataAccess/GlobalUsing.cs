@@ -7,3 +7,4 @@ global using Microsoft.Extensions.Logging;
 global using TopUpGenie.DataAccess.DataContext;
 global using TopUpGenie.DataAccess.Repository;
 global using Microsoft.EntityFrameworkCore.Storage;
+global using TopUpGenie.DataAccess.Enums;

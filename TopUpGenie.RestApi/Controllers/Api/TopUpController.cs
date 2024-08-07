@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.RestApi.Controllers.Api;
 
+/// <summary>
+/// TopUpController
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class TopUpController : ControllerBase
@@ -11,21 +14,32 @@ public class TopUpController : ControllerBase
         _topUpService = topUpService;
     }
 
+    /// <summary>
+    /// TopUpOptions
+    /// </summary>
+    /// <returns></returns>
     [Authorize(Roles = "admin, user")]
     [HttpGet]
     [Route("TopUpOptions")]
     public async Task<IResponse<IEnumerable<TopUpOption>>> TopUpOptions()
     {
-        return await _topUpService.ListTopUpOptions();
+        var response = await _topUpService.ListTopUpOptions();
+        return response.ToApiResponse(HttpContext);
     }
 
+    /// <summary>
+    /// InitiateTransact
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [Authorize(Roles = "admin, user")]
     [HttpPost]
     [Route("Transact")]
     public async Task<IResponse<bool>> InitiateTransact([FromBody] InitiateTransactionRequestModel model)
     {
         var context = HttpContext.GetRequestContext();
-        return await _topUpService.TopUpTransaction(context, model);
+        var response = await _topUpService.TopUpTransaction(context, model);
+        return response.ToApiResponse(HttpContext);
     }
 }
 

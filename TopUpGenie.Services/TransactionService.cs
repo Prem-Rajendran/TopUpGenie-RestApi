@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Services;
 
+/// <summary>
+/// TransactionService
+/// </summary>
 public class TransactionService : ITransactionService
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -13,7 +16,15 @@ public class TransactionService : ITransactionService
         _transactionUnitOfWork = transactionUnitOfWork;
     }
 
-    public async Task<bool> BeginTransact(User user, Beneficiary beneficiary, TopUpOption topUpOption)
+    /// <summary>
+    /// BeginTransact
+    /// </summary>
+    /// <param name="response"></param>
+    /// <param name="user"></param>
+    /// <param name="beneficiary"></param>
+    /// <param name="topUpOption"></param>
+    /// <returns></returns>
+    public async Task<bool> BeginTransact(IResponse<bool> response, User user, Beneficiary beneficiary, TopUpOption topUpOption)
     {
         // Calculate total amount
         int totalAmount = 1 + topUpOption.Amount;
@@ -25,7 +36,7 @@ public class TransactionService : ITransactionService
             BeneficiaryId = beneficiary.Id,
             TopUpOptionId = topUpOption.TopUpOptionId,
             TransactionFee = 1,
-            TransactionStatus = "Initiated",
+            TransactionStatus = DataAccess.Enums.TransactionStatus.INITIATED,
             Messages = "",
             TransactionAmount = topUpOption.Amount,
             TotalTransactionAmount = totalAmount
@@ -38,11 +49,12 @@ public class TransactionService : ITransactionService
 
             if (!await IsEligibleForTransaction(user, beneficiary, totalAmount))
             {
-                transaction.TransactionStatus = "Failure";
-                transaction.Messages += "Monthly Transaction Limit Reached;";
+                transaction.TransactionStatus = DataAccess.Enums.TransactionStatus.FAILED;
+                transaction.Messages += $"{ErrorCodes.TRANSACTION_MONTHLY_LIMIT_REACHED} - {ErrorMessage.TRANSACTION_MONTHLY_LIMIT_REACHED};";
+                response.AddMessage(ErrorCodes.TRANSACTION_MONTHLY_LIMIT_REACHED, ErrorMessage.TRANSACTION_MONTHLY_LIMIT_REACHED);
                 _transactionUnitOfWork.Transactions.Update(transaction);
                 await _transactionUnitOfWork.CompleteAsync();
-                throw new Exception("Monthly Transaction Limit Reached");
+                throw new Exception(ErrorCodes.TRANSACTION_MONTHLY_LIMIT_REACHED);
             }
 
             // Begin Transaction
@@ -54,34 +66,39 @@ public class TransactionService : ITransactionService
             // Check if balance is sufficient
             if (balance < totalAmount)
             {
-                transaction.TransactionStatus = "Failure";
-                transaction.Messages += "Insufficient Balance;";
+                transaction.TransactionStatus = DataAccess.Enums.TransactionStatus.FAILED;
+                transaction.Messages += $"{ErrorCodes.TRANSACTION_INSUFICIENT_BALANCE} - {ErrorMessage.TRANSACTION_INSUFICIENT_BALANCE};";
+                response.AddMessage(ErrorCodes.TRANSACTION_INSUFICIENT_BALANCE, ErrorMessage.TRANSACTION_INSUFICIENT_BALANCE);
                 _transactionUnitOfWork.Transactions.Update(transaction);
                 await _transactionUnitOfWork.CompleteAsync();
-                throw new Exception("Insufficient Balance");
+                throw new Exception(ErrorCodes.TRANSACTION_INSUFICIENT_BALANCE);
             }
 
             // Debit User Account
             bool debitSuccess = await _externalService.DebitUserAccountAsync(user.Id, totalAmount);
             if (!debitSuccess)
             {
-                transaction.Messages += "Failed to debt user account;";
+                transaction.TransactionStatus = DataAccess.Enums.TransactionStatus.FAILED;
+                transaction.Messages += $"{ErrorCodes.TRANSACTION_DEBIT_FAILED} - {ErrorMessage.TRANSACTION_DEBIT_FAILED};";
+                response.AddMessage(ErrorCodes.TRANSACTION_DEBIT_FAILED, ErrorMessage.TRANSACTION_DEBIT_FAILED);
                 _transactionUnitOfWork.Transactions.Update(transaction);
-                throw new Exception("Failed to debt user account");
+                throw new Exception(ErrorCodes.TRANSACTION_DEBIT_FAILED);
             }
 
             bool creditSuccess = await _externalService.CreditUserAccountAsync(beneficiary.BeneficiaryUser.Id, topUpOption.Amount);
             if (!creditSuccess)
             {
-                transaction.Messages += "Failed to credit user account;";
+                transaction.TransactionStatus = DataAccess.Enums.TransactionStatus.FAILED;
+                transaction.Messages += $"{ErrorCodes.TRANSACTION_CREDIT_FAILED} - {ErrorMessage.TRANSACTION_CREDIT_FAILED};";
+                response.AddMessage(ErrorCodes.TRANSACTION_CREDIT_FAILED, ErrorMessage.TRANSACTION_CREDIT_FAILED);
                 _transactionUnitOfWork.Transactions.Update(transaction);
-                throw new Exception("Failed to credit user account");
+                throw new Exception(ErrorCodes.TRANSACTION_CREDIT_FAILED);
             }
 
             await _unitOfWork.CompleteAsync();
             await _unitOfWork.CommitAsync();
 
-            transaction.TransactionStatus = "Success";
+            transaction.TransactionStatus = DataAccess.Enums.TransactionStatus.SUCCESS;
             _transactionUnitOfWork.Transactions.Update(transaction);
             await _transactionUnitOfWork.CompleteAsync();
 
@@ -90,11 +107,20 @@ public class TransactionService : ITransactionService
         catch (Exception ex)
         {
             await _unitOfWork.RollbackAsync();
-            transaction.TransactionStatus = "Failure";
+            transaction.TransactionStatus = DataAccess.Enums.TransactionStatus.FAILED;
             _transactionUnitOfWork.Transactions.Update(transaction);
             await _transactionUnitOfWork.CompleteAsync();
 
             // Trigger a Orchestrated Mechanism or function like LAMBDA or a Batch job to identify failed transaction and initiate refund process if necessary.
+
+            switch (ex.Message)
+            {
+                case ErrorCodes.TRANSACTION_CREDIT_FAILED:
+                    // Refund the money to debited user
+                    // or
+                    // Retry transaction again
+                break;
+            }
         }
 
         return false;

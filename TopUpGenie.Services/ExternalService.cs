@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Services;
 
+/// <summary>
+/// ExternalService
+/// </summary>
 public class ExternalService : IExternalService
 {
     private readonly HttpClient _httpClient;

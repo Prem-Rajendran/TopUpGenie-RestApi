@@ -1,5 +1,8 @@
 ﻿namespace TopUpGenie.Services.Models.Dto;
 
+/// <summary>
+/// UserDto
+/// </summary>
 public class UserDto
 {
 	public int UserId { get; set; }
