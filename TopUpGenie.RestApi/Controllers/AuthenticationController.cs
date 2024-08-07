@@ -4,11 +4,15 @@
 [Route("[controller]")]
 public class AuthenticationController : ControllerBase
 {
-    private IAuthService _authService;
+    private readonly IAuthService _authService;
+    private readonly TopUpGenieDbContext _genieDbContext;
+    private readonly TransactionDbContext _transactionDbContext;
 
-    public AuthenticationController(IAuthService authService)
+    public AuthenticationController(IAuthService authService, TopUpGenieDbContext genieDbContext, TransactionDbContext transactionDbContext)
     {
         _authService = authService;
+        _genieDbContext = genieDbContext;
+        _transactionDbContext = transactionDbContext;
     }
 
     [HttpPost]

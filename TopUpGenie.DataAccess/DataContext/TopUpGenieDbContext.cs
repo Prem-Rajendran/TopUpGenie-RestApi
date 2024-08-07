@@ -12,6 +12,7 @@ public class TopUpGenieDbContext : DbContext
     public DbSet<LoginSession> LoginSessions { get; set; }
     public DbSet<Beneficiary> Beneficiaries { get; set; }
     public DbSet<TopUpOption> TopUpOptions { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

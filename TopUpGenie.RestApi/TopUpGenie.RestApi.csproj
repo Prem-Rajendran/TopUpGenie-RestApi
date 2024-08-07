@@ -25,15 +25,15 @@
 
   <ItemGroup>
     <None Remove="Database\" />
-    <None Remove="Migrations\" />
     <None Remove="Extensions\" />
     <None Remove="Middleware\" />
+    <None Remove="Migrations\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Database\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Extensions\" />
     <Folder Include="Middleware\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TopUpGenie.Services\TopUpGenie.Services.csproj">

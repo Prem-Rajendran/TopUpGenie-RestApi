@@ -1,23 +1,33 @@
-﻿namespace TopUpGenie.RestApi.Controllers;
+﻿using TopUpGenie.DataAccess.DataModel;
+
+namespace TopUpGenie.RestApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
 public class TopUpController : ControllerBase
 {
-    private TopUpGenieDbContext _dbContext;
+    private readonly ITopUpService _topUpService;
 
-    private readonly ILogger<TopUpController> _logger;
-
-    public TopUpController(ILogger<TopUpController> logger, TopUpGenieDbContext dbContext)
+    public TopUpController(ITopUpService topUpService)
     {
-        _logger = logger;
-        _dbContext = dbContext;
+        _topUpService = topUpService;
     }
 
-    [HttpGet(Name = "TopUpController")]
-    public string Get()
+    [Authorize(Roles = "admin, user")]
+    [HttpGet]
+    [Route("TopUpOptions")]
+    public async Task<IResponse<IEnumerable<TopUpOption>>> TopUpOptions()
     {
-        return "TopUpController";
+        return await _topUpService.ListTopUpOptions();
+    }
+
+    [Authorize(Roles = "admin, user")]
+    [HttpPost]
+    [Route("Transact")]
+    public async Task<IResponse<bool>> InitiateTransact([FromBody] InitiateTransactionRequestModel model)
+    {
+        var context = HttpContext.GetRequestContext();
+        return await _topUpService.TopUpTransaction(context, model);
     }
 }
 

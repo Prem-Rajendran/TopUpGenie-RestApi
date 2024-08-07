@@ -54,6 +54,7 @@ namespace TopUpGenie.RestApi.Migrations
                     Nickname = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     CreatedByUserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsActive = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
@@ -109,6 +110,8 @@ namespace TopUpGenie.RestApi.Migrations
                     TopUpOptionId = table.Column<int>(type: "INTEGER", nullable: false),
                     TransactionAmount = table.Column<int>(type: "INTEGER", nullable: false),
                     TransactionFee = table.Column<int>(type: "INTEGER", nullable: false),
+                    TransactionStatus = table.Column<string>(type: "TEXT", nullable: false),
+                    Messages = table.Column<string>(type: "TEXT", nullable: false),
                     TotalTransactionAmount = table.Column<int>(type: "INTEGER", nullable: false),
                     TransactionDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },

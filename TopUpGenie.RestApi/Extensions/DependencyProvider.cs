@@ -64,6 +64,8 @@ namespace TopUpGenie.RestApi.Extensions
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IBeneficiaryService, BeneficiaryService>();
+            builder.Services.AddScoped<ITopUpService, TopUpService>();
+            builder.Services.AddScoped<ITransactionService, TransactionService>();
         }
 
         public static void AddDbContext(this WebApplicationBuilder builder)

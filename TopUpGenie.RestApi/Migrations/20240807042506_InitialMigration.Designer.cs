@@ -11,8 +11,8 @@ using TopUpGenie.DataAccess.DataContext;
 namespace TopUpGenie.RestApi.Migrations
 {
     [DbContext(typeof(TopUpGenieDbContext))]
-    [Migration("20240806120832_Mapping")]
-    partial class Mapping
+    [Migration("20240807042506_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -118,6 +118,10 @@ namespace TopUpGenie.RestApi.Migrations
                     b.Property<int>("BeneficiaryId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Messages")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("TopUpOptionId")
                         .HasColumnType("INTEGER");
 
@@ -132,6 +136,10 @@ namespace TopUpGenie.RestApi.Migrations
 
                     b.Property<int>("TransactionFee")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("TransactionStatus")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");

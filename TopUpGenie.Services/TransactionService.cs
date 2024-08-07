@@ -65,20 +65,16 @@ public class TransactionService : ITransactionService
             bool debitSuccess = await _externalService.DebitUserAccountAsync(user.Id, totalAmount);
             if (!debitSuccess)
             {
-                transaction.TransactionStatus = "Failure";
                 transaction.Messages += "Failed to debt user account;";
                 _transactionUnitOfWork.Transactions.Update(transaction);
-                await _transactionUnitOfWork.CompleteAsync();
                 throw new Exception("Failed to debt user account");
             }
 
-            bool creditSuccess = await _externalService.CreditUserAccountAsync(beneficiary.Id, totalAmount);
+            bool creditSuccess = await _externalService.CreditUserAccountAsync(beneficiary.BeneficiaryUser.Id, topUpOption.Amount);
             if (!creditSuccess)
             {
-                transaction.TransactionStatus = "Failure";
                 transaction.Messages += "Failed to credit user account;";
                 _transactionUnitOfWork.Transactions.Update(transaction);
-                await _transactionUnitOfWork.CompleteAsync();
                 throw new Exception("Failed to credit user account");
             }
 
@@ -94,8 +90,11 @@ public class TransactionService : ITransactionService
         catch (Exception ex)
         {
             await _unitOfWork.RollbackAsync();
+            transaction.TransactionStatus = "Failure";
             _transactionUnitOfWork.Transactions.Update(transaction);
             await _transactionUnitOfWork.CompleteAsync();
+
+            // Trigger a Orchestrated Mechanism or function like LAMBDA or a Batch job to identify failed transaction and initiate refund process if necessary.
         }
 
         return false;

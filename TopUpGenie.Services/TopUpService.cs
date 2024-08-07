@@ -51,15 +51,15 @@ public class TopUpService : ITopUpService
         return response;
     }
 
-    public async Task<IResponse<bool>> TopUpTransaction(RequestContext context, int beneficiaryId, int topUpOptionId)
+    public async Task<IResponse<bool>> TopUpTransaction(RequestContext context, InitiateTransactionRequestModel requestModel)
     {
         IResponse<bool> response = new GenericServiceResponse<bool> { Status = Common.Enums.Status.Unknown };
 
         try
         {
             var userTask = _unitOfWork.Users.GetByIdAsync(context.UserId);
-            var beneficiaryTask = _unitOfWork.Beneficiaries.GetByIdAsync(beneficiaryId);
-            var topUpOptionsTask = _unitOfWork.TopUpOptions.GetByIdAsync(topUpOptionId);
+            var beneficiaryTask = _unitOfWork.Beneficiaries.GetByIdAsync(requestModel.BeneficiaryId);
+            var topUpOptionsTask = _unitOfWork.TopUpOptions.GetByIdAsync(requestModel.TopUpOptionId);
 
             await Task.WhenAll(userTask, beneficiaryTask, topUpOptionsTask);
 

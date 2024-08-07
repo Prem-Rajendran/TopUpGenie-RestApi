@@ -115,6 +115,10 @@ namespace TopUpGenie.RestApi.Migrations
                     b.Property<int>("BeneficiaryId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Messages")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("TopUpOptionId")
                         .HasColumnType("INTEGER");
 
@@ -129,6 +133,10 @@ namespace TopUpGenie.RestApi.Migrations
 
                     b.Property<int>("TransactionFee")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("TransactionStatus")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
