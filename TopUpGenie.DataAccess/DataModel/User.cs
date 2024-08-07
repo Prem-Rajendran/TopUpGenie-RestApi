@@ -14,7 +14,7 @@ public class User
     public string? Password { get; set; }
 
     [Required]
-    [StringLength(10, MinimumLength = 10, ErrorMessage = "Phone Number should be of 10 characters strictly.")]
+    [StringLength(7, MinimumLength = 7, ErrorMessage = "UAE Phone Number should be of 7 characters strictly.")]
     public string? PhoneNumber { get; set; }
 
     [Required]

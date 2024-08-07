@@ -1,11 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System.Data;
-using TopUpGenie.Services.Models.Dto;
-
-namespace TopUpGenie.RestApi.Controllers;
+﻿namespace TopUpGenie.RestApi.Controllers.Api;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AdminController : ControllerBase
 {
     private readonly IAdminService _adminService;
@@ -58,5 +54,13 @@ public class AdminController : ControllerBase
     {
         var context = HttpContext.GetRequestContext();
         return await _adminService.DeleteUser(context, id);
+    }
+
+    [Authorize(Roles = "admin")]
+    [HttpGet]
+    [Route("GetLast5Transaction")]
+    public async Task<IResponse<IEnumerable<TransactionDto>>> GetLast5Transaction()
+    {
+        return await _adminService.GetLast5Transactions();
     }
 }

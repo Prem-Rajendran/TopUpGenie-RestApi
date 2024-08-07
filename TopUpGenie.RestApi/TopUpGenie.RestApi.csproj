@@ -28,12 +28,14 @@
     <None Remove="Extensions\" />
     <None Remove="Middleware\" />
     <None Remove="Migrations\" />
+    <None Remove="Controllers\Api\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Database\" />
     <Folder Include="Extensions\" />
     <Folder Include="Middleware\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Controllers\Api\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TopUpGenie.Services\TopUpGenie.Services.csproj">

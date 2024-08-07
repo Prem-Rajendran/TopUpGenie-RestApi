@@ -16,3 +16,4 @@ global using TopUpGenie.RestApi.Extensions;
 global using Microsoft.AspNetCore.Authorization;
 global using TopUpGenie.RestApi.Middleware;
 global using TopUpGenie.Services.Models.Dto;
+global using TopUpGenie.DataAccess.DataModel;

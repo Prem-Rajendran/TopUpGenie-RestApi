@@ -11,7 +11,7 @@ using TopUpGenie.DataAccess.DataContext;
 namespace TopUpGenie.RestApi.Migrations
 {
     [DbContext(typeof(TopUpGenieDbContext))]
-    [Migration("20240807042506_InitialMigration")]
+    [Migration("20240807080429_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -182,7 +182,7 @@ namespace TopUpGenie.RestApi.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(10)
+                        .HasMaxLength(7)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")

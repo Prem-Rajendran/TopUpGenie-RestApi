@@ -33,7 +33,7 @@ namespace TopUpGenie.RestApi.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Password = table.Column<string>(type: "TEXT", maxLength: 12, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "TEXT", maxLength: 7, nullable: false),
                     Verified = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsAdmin = table.Column<bool>(type: "INTEGER", nullable: false),
                     Balance = table.Column<int>(type: "INTEGER", nullable: false),

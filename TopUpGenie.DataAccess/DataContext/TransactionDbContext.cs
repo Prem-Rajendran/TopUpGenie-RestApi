@@ -7,6 +7,9 @@ namespace TopUpGenie.DataAccess.DataContext
         {
         }
 
+        public DbSet<User> Users { get; set; }
+        public DbSet<Beneficiary> Beneficiaries { get; set; }
+        public DbSet<TopUpOption> TopUpOptions { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -43,31 +43,66 @@ public class TransactionRepository : ITransactionRepository
         return false;
     }
 
+    public async Task<IEnumerable<Transaction>> GetLastFiveTransactions()
+    {
+        try
+        {
+            IEnumerable<Transaction> transactions = await _context.Transactions
+                .Include(e => e.Beneficiary)
+                .Include(e => e.User)
+                .Include(e => e.TopUpOption)
+                .ToListAsync();
+
+            return transactions.TakeLast(5);
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError("Failed to get transaction list", ex);
+        }
+
+        return null;
+    }
+
     public async Task<int> GetTotalMonthlySpends(int userId)
     {
-        IEnumerable<Transaction> transactions = await _context.Transactions.ToListAsync();
+        IEnumerable<Transaction>? transactions = await GetUsersMonthlyTransactions(userId);
         if (transactions != null && transactions.Any())
-            return transactions
-                .Where(t => t.UserId == userId &&
-                    t.TransactionDate.Month == DateTime.Now.Month &&
-                    t.TransactionDate.Year == DateTime.Now.Year)
-                .Sum(t => t.TransactionAmount);
-
+            return transactions.Sum(t => t.TransactionAmount);
         return 0;
     }
 
     public async Task<int> GetTotalMonthlySpendsPerBeneficiary(int userId, int beneficiaryId)
     {
-        IEnumerable<Transaction> transactions = await _context.Transactions.ToListAsync();
+        IEnumerable<Transaction>? transactions = await GetUsersMonthlyTransactions(userId);
         if (transactions != null && transactions.Any())
             return transactions
-                .Where(t => t.UserId == userId &&
-                    t.BeneficiaryId == beneficiaryId &&
-                    t.TransactionDate.Month == DateTime.Now.Month &&
-                    t.TransactionDate.Year == DateTime.Now.Year)
+                .Where(t => t.BeneficiaryId == beneficiaryId)
                 .Sum(t => t.TransactionAmount);
 
         return 0;
+    }
+
+    public async Task<IEnumerable<Transaction>?> GetUsersMonthlyTransactions(int userId)
+    {
+        try
+        {
+            IEnumerable<Transaction> transactions = await _context.Transactions.ToListAsync();
+            if (transactions != null && transactions.Any())
+            {
+                return transactions.Where(t => t.UserId == userId &&
+                    t.TransactionStatus == "Success" &&
+                    t.TransactionDate.Month == DateTime.Now.Month &&
+                    t.TransactionDate.Year == DateTime.Now.Year);
+            }
+
+            return transactions;
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError("Failed to get transaction list", ex);
+        }
+
+        return null;
     }
 }
 

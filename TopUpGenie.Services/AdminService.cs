@@ -3,10 +3,12 @@
 public class AdminService : IAdminService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ITransactionUnitOfWork _transactionUnitOfWork;
 
-    public AdminService(IUnitOfWork unitOfWork)
+    public AdminService(IUnitOfWork unitOfWork, ITransactionUnitOfWork transactionUnitOfWork)
 	{
         _unitOfWork = unitOfWork;
+        _transactionUnitOfWork = transactionUnitOfWork;
     }
 
     /// <summary>
@@ -227,6 +229,50 @@ public class AdminService : IAdminService
                 ErrorCode = ErrorCodes.ADMIN_DELETE_USER_EXCEPTION,
                 Description = string.Format(ErrorMessage.ADMIN_DELETE_USER_EXCEPTION, ex.Message)
             });
+        }
+
+        return response;
+    }
+
+    /// <summary>
+    /// GetLast5Transactions
+    /// </summary>
+    /// <returns></returns>
+    public async Task<IResponse<IEnumerable<TransactionDto>>> GetLast5Transactions()
+    {
+        IResponse<IEnumerable<TransactionDto>> response = new GenericServiceResponse<IEnumerable<TransactionDto>> { Status = Common.Enums.Status.Unknown };
+        try
+        {
+            IEnumerable<Transaction>? transactions = await _transactionUnitOfWork.Transactions.GetLastFiveTransactions();
+            if (transactions != null && transactions.Any())
+            {
+                response.Status = Common.Enums.Status.Success;
+                response.Data = transactions.Select(s => new TransactionDto(s));
+            }
+            else
+            {
+                response.Status = Common.Enums.Status.Failure;
+                response.Messages = new List<Message>
+                {
+                    new Message
+                    {
+                        ErrorCode = "",
+                        Description = ""
+                    }
+                };
+            }
+
+        }
+        catch (Exception ex)
+        {
+            response.Messages = new List<Message>
+                {
+                    new Message
+                    {
+                        ErrorCode = "",
+                        Description = ""
+                    }
+                };
         }
 
         return response;

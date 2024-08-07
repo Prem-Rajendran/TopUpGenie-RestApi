@@ -1,7 +1,7 @@
-﻿namespace TopUpGenie.RestApi.Controllers;
+﻿namespace TopUpGenie.RestApi.Controllers.Api;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AuthenticationController : ControllerBase
 {
     private readonly IAuthService _authService;

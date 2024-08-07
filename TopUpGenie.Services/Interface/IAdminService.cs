@@ -8,6 +8,8 @@ public interface IAdminService
 
 	Task<IResponse<IEnumerable<UserDto>>> GetAllUsersAsync(RequestContext requestContext);
 
+	Task<IResponse<IEnumerable<TransactionDto>>> GetLast5Transactions();
+
 	Task<IResponse<bool>> UpdateUserAsync(RequestContext requestContext, UpdateUserRequestModel requestModel);
 
 	Task<IResponse<bool>> DeleteUser(RequestContext requestContext, int id);

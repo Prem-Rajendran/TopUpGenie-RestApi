@@ -63,6 +63,7 @@ namespace TopUpGenie.RestApi.Extensions
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IProfileService, ProfileService>();
             builder.Services.AddScoped<IBeneficiaryService, BeneficiaryService>();
             builder.Services.AddScoped<ITopUpService, TopUpService>();
             builder.Services.AddScoped<ITransactionService, TransactionService>();

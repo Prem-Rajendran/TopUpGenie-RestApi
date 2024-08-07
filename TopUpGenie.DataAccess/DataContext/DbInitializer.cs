@@ -12,12 +12,73 @@ public class DbInitializer
             context.Users.AddRange(
                 new User
                 {
-                    Name = "Admin",
-                    PhoneNumber = "0000000000",
-                    Password = "AQAAAAIAAYagAAAAEN5sdVVIuZFjqtIAwcFiFa7DnlYgn89rujvz+KJE1sE097EJqlgpT5YiSHiR2hnGzw==",  //"admin123"
+                    Id = 1,
+                    Name = "user1-admin",
+                    PhoneNumber = "0000001",
+                    Password = "AQAAAAIAAYagAAAAEN5sdVVIuZFjqtIAwcFiFa7DnlYgn89rujvz+KJE1sE097EJqlgpT5YiSHiR2hnGzw==",  //admin123
                     IsAdmin = true,
                     Balance = int.MaxValue,
                     Verified = true
+                },
+                new User
+                {
+                    Id = 2,
+                    Name = "user2-verified",
+                    PhoneNumber = "0000002",
+                    Password = "AQAAAAIAAYagAAAAEE7M6kLHn+cOGWwv5xFMCuJ0lb6+UbO27/EyLRZz/j6hO3rW2gETaBSq71fFHmuYzQ==",  //1234
+                    IsAdmin = false,
+                    Balance = 4000,
+                    Verified = true
+                },
+                new User
+                {
+                    Id = 3,
+                    Name = "user3-verified",
+                    PhoneNumber = "0000003",
+                    Password = "AQAAAAIAAYagAAAAEE7M6kLHn+cOGWwv5xFMCuJ0lb6+UbO27/EyLRZz/j6hO3rW2gETaBSq71fFHmuYzQ==",  //1234
+                    IsAdmin = false,
+                    Balance = 2000,
+                    Verified = true
+                },
+                new User
+                {
+                    Id = 4,
+                    Name = "user4-verified",
+                    PhoneNumber = "0000004",
+                    Password = "AQAAAAIAAYagAAAAEE7M6kLHn+cOGWwv5xFMCuJ0lb6+UbO27/EyLRZz/j6hO3rW2gETaBSq71fFHmuYzQ==",  //1234
+                    IsAdmin = false,
+                    Balance = 500,
+                    Verified = true
+                },
+                new User
+                {
+                    Id = 5,
+                    Name = "user5-unverified",
+                    PhoneNumber = "0000005",
+                    Password = "AQAAAAIAAYagAAAAEE7M6kLHn+cOGWwv5xFMCuJ0lb6+UbO27/EyLRZz/j6hO3rW2gETaBSq71fFHmuYzQ==",  //1234
+                    IsAdmin = false,
+                    Balance = 3300,
+                    Verified = false
+                },
+                new User
+                {
+                    Id = 6,
+                    Name = "user6-unverified",
+                    PhoneNumber = "0000006",
+                    Password = "AQAAAAIAAYagAAAAEE7M6kLHn+cOGWwv5xFMCuJ0lb6+UbO27/EyLRZz/j6hO3rW2gETaBSq71fFHmuYzQ==",  //1234
+                    IsAdmin = false,
+                    Balance = 2500,
+                    Verified = false
+                },
+                new User
+                {
+                    Id = 7,
+                    Name = "user7-unverified",
+                    PhoneNumber = "0000007",
+                    Password = "AQAAAAIAAYagAAAAEE7M6kLHn+cOGWwv5xFMCuJ0lb6+UbO27/EyLRZz/j6hO3rW2gETaBSq71fFHmuYzQ==",  //1234
+                    IsAdmin = false,
+                    Balance = 1700,
+                    Verified = false
                 }
             );
         }

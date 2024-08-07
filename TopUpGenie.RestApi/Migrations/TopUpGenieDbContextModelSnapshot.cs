@@ -179,7 +179,7 @@ namespace TopUpGenie.RestApi.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(10)
+                        .HasMaxLength(7)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UpdatedAt")

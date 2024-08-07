@@ -1,9 +1,7 @@
-﻿using TopUpGenie.DataAccess.DataModel;
-
-namespace TopUpGenie.RestApi.Controllers;
+﻿namespace TopUpGenie.RestApi.Controllers.Api;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class TopUpController : ControllerBase
 {
     private readonly ITopUpService _topUpService;
