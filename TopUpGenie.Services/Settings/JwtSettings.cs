@@ -3,6 +3,7 @@
 /// <summary>
 /// JwtSettings
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class JwtSettings
 {
     public string? Key { get; set; }

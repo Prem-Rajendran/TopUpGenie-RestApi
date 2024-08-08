@@ -3,6 +3,7 @@
 /// <summary>
 /// TransactionDto
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class TransactionDto
 {
     public int TransactionId { get; set; }

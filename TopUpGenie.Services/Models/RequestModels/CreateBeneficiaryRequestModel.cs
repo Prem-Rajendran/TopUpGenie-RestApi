@@ -3,6 +3,7 @@
 /// <summary>
 /// CreateBeneficiaryRequestModel
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class CreateBeneficiaryRequestModel
 {
     [Required]

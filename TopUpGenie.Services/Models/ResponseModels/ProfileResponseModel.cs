@@ -3,6 +3,7 @@
 /// <summary>
 /// ProfileResponseModel
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class ProfileResponseModel
 {
 	public UserDto? UserDetails { get; set; }

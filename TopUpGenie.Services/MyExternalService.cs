@@ -3,6 +3,7 @@
 /// <summary>
 /// MyExternalService
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class MyExternalService : IExternalService
 {
     private readonly IUnitOfWork _unitOfWork;

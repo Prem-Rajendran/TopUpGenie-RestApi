@@ -1,9 +1,9 @@
-﻿
-namespace TopUpGenie.Services.Models.Dto;
+﻿namespace TopUpGenie.Services.Models.Dto;
 
 /// <summary>
 /// BeneficiaryDto
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class BeneficiaryDto
 {
 	public int BeneficiaryId { get; set; }

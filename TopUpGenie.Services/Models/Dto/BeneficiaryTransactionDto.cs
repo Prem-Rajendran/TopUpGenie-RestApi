@@ -3,6 +3,7 @@
 /// <summary>
 /// BeneficiaryTransactionDto
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class BeneficiaryTransactionDto : BeneficiaryDto
 {
 	public int TotalMonthlyTransaction { get; set; }

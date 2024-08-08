@@ -3,6 +3,7 @@
 /// <summary>
 /// UpdateUserRequestModel
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class UpdateUserRequestModel
 {
 	[Required]

@@ -3,6 +3,7 @@
 /// <summary>
 /// InitiateTransactionRequestModel
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class InitiateTransactionRequestModel
 {
 	public int BeneficiaryId { get; set; }

@@ -3,6 +3,7 @@
 /// <summary>
 /// TokenResponseModel
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class TokenResponseModel
 {
 	public string? AccessToken { get; set; }

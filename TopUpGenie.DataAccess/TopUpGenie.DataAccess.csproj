@@ -12,6 +12,7 @@
     <None Remove="Interface\" />
     <None Remove="Repository\" />
     <None Remove="Enums\" />
+    <None Remove="Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataModel\" />
@@ -19,6 +20,7 @@
     <Folder Include="Interface\" />
     <Folder Include="Repository\" />
     <Folder Include="Enums\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.20">

@@ -1,4 +1,6 @@
-﻿namespace TopUpGenie.DataAccess;
+﻿using TopUpGenie.DataAccess.Extensions;
+
+namespace TopUpGenie.DataAccess;
 
 /// <summary>
 /// TransactionUnitOfWork
@@ -33,8 +35,9 @@ public class TransactionUnitOfWork : ITransactionUnitOfWork
             await _context.SaveChangesAsync();
             return true;
         }
-        catch (Exception ex)
+        catch (DbUpdateException ex)
         {
+            _context.HandleDbUpdateException(ex);
             _logger.LogError("Failed to save all changes - UnitOfWork", ex);
         }
 

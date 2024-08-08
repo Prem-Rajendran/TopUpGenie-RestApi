@@ -3,6 +3,7 @@
 /// <summary>
 /// UserDto
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class UserDto
 {
 	public int UserId { get; set; }

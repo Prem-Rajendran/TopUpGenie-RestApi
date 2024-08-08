@@ -3,6 +3,7 @@
 /// <summary>
 /// UserAuthenticationRequestModel
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class UserAuthenticationRequestModel
 {
 	public int UserId { get; set; }

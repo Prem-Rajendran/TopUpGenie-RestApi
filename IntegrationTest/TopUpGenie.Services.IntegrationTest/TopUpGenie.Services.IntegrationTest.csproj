@@ -20,6 +20,18 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Moq" Version="4.20.70" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Helper\" />
+    <None Remove="Seeder\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helper\" />
+    <Folder Include="Seeder\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\TopUpGenie.Services\TopUpGenie.Services.csproj" />
+  </ItemGroup>
 </Project>

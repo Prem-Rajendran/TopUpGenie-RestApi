@@ -3,6 +3,7 @@
 /// <summary>
 /// ErrorMessage
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class ErrorMessage
 {
     #region Admin Error Messages

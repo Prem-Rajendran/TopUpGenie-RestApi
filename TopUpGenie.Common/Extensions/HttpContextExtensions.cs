@@ -3,6 +3,7 @@
 /// <summary>
 /// HttpContextExtensions
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class HttpContextExtensions
 {
     /// <summary>

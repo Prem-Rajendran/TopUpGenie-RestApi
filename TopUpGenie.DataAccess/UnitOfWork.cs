@@ -1,4 +1,7 @@
-﻿namespace TopUpGenie.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using TopUpGenie.DataAccess.Extensions;
+
+namespace TopUpGenie.DataAccess;
 
 /// <summary>
 /// UnitOfWork
@@ -51,8 +54,9 @@ public class UnitOfWork : IUnitOfWork
             await _context.SaveChangesAsync();
             return true;
         }
-        catch(Exception ex)
+        catch(DbUpdateException ex)
         {
+            _context.HandleDbUpdateException(ex);
             _logger.LogError("Failed to save all changes - UnitOfWork", ex);
         }
 

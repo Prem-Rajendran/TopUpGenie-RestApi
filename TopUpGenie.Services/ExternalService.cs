@@ -3,6 +3,7 @@
 /// <summary>
 /// ExternalService
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class ExternalService : IExternalService
 {
     private readonly HttpClient _httpClient;

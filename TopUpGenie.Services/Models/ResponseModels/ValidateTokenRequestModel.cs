@@ -3,6 +3,7 @@
 /// <summary>
 /// ValidateTokenRequestModel
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class ValidateTokenRequestModel
 {
 	public int UserId;

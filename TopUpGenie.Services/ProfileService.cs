@@ -9,7 +9,7 @@ public class ProfileService : IProfileService
     private readonly ITransactionUnitOfWork _transactionUnitOfWork;
 
     public ProfileService(IUnitOfWork unitOfWork, ITransactionUnitOfWork transactionUnitOfWork)
-		{
+	{
         _unitOfWork = unitOfWork;
         _transactionUnitOfWork = transactionUnitOfWork;
     }
