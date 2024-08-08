@@ -1,0 +1,10 @@
+﻿global using Xunit;
+global using Moq;
+global using TopUpGenie.DataAccess.DataModel;
+global using TopUpGenie.DataAccess.Interface;
+global using TopUpGenie.Services.Interface;
+global using TopUpGenie.Services.Models.RequestModels;
+global using TopUpGenie.Common.Interface;
+global using TopUpGenie.Services.Constants;
+global using TopUpGenie.Services.Helper;
+global using TopUpGenie.Services.Models.ResponseModels;

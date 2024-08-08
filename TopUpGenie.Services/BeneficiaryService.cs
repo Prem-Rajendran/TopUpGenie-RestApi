@@ -141,12 +141,12 @@ public class BeneficiaryService : IBeneficiaryService
     /// <exception cref="NotImplementedException"></exception>
     public async Task<IResponse<IEnumerable<BeneficiaryDto>>> GetMyBeneficiaries(RequestContext requestContext)
     {
-        IResponse<IEnumerable<BeneficiaryDto>> response = new GenericServiceResponse<IEnumerable<BeneficiaryDto>> { Status = Common.Enums.Status.Success };
+        IResponse<IEnumerable<BeneficiaryDto>> response = new GenericServiceResponse<IEnumerable<BeneficiaryDto>> { Status = Common.Enums.Status.Unknown };
 
         try
         {
             IEnumerable<Beneficiary> beneficiaries = await _unitOfWork.Beneficiaries.GetAllAsync();
-            if (beneficiaries != null)
+            if (beneficiaries != null && beneficiaries.Any())
             {
                 response.Status = Common.Enums.Status.Success;
                 response.Data = beneficiaries.Where(b => b.CreatedByUserId == requestContext.UserId).Select(b => new BeneficiaryDto(b));
@@ -175,7 +175,7 @@ public class BeneficiaryService : IBeneficiaryService
     /// <exception cref="NotImplementedException"></exception>
     public async Task<IResponse<BeneficiaryDto>> GetMyBeneficiaryById(RequestContext requestContext, int id)
     {
-        IResponse<BeneficiaryDto> response = new GenericServiceResponse<BeneficiaryDto> { Status = Common.Enums.Status.Success };
+        IResponse<BeneficiaryDto> response = new GenericServiceResponse<BeneficiaryDto> { Status = Common.Enums.Status.Unknown };
 
         try
         {
