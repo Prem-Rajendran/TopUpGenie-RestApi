@@ -28,7 +28,7 @@ To clone and set up **TopUpGenie** on your local machine, follow these steps:
 
 ```bash
 git clone https://github.com/your-username/TopUpGenie.git
-cd TopUpGenie
+cd TopUpGenie-RestApi
 ```
 
 ### 2. Database Setup
